@@ -1,0 +1,109 @@
+
+    {
+    "info":{
+        "char_name":"user_in",
+        "player_name":"discord_in",
+        "alignment":"focus_alignment",
+        "race":[
+            "Humans",
+            "Elves",
+            "Dwarves",
+            "Lycans",
+            "Alkonost",
+            "Half-Blood",
+            "Undead"
+        ],
+        "focus":["Melee", "Ranged", "Magic"],
+        "mastery":"focus_primary",
+        "discipline":"focus_secondary"
+    },
+    "stats":{
+        "level":"0",
+        "exp":"0",
+        "conditions":"effects",
+        "current_health":"max_health + (recovery * stamina)",
+        "current_energy":"max_health + (recovery * stamina)",
+        "max_health":"race + strength + dexterity + stamina + level_modifier",
+        "max_energy":"class + stamina + agility + intelligence + level_modifier",
+        "attack":"race + class + ability + skills + equipment",
+        "defense":"race + strength + dexterity + equipment",
+        "mobility":"stamina + agility + capacity"
+    },
+    "capability":{
+         "strength":"default or 4d6",
+         "strength_bonus":"strength",
+         "dexterity":"default or 4d6",
+         "dexterity_bonus":"dexterity",
+         "stamina":"default or 4d6",
+         "stamina_bonus":"stamina",
+         "agility":"default or 4d6",
+         "agility_mod":"agility",
+         "intelligence":"default or 4d6",
+         "intelligence_mod":"intelligence"
+   },
+   "focus" : [
+       {
+        "focus level" : "3",
+        "focus branch" : "Melee",
+        "ability name" : "Human Shield",
+        "ability level" : "1",
+        "abililty type" : "Damage Resistance",
+        "alignment" : "Good",
+        "cost" : "-20 energy",
+        "effect" : "+20 damage resistence", 
+        "cooldown" : "2:00"
+       },
+       {
+        "focus level" : "17",
+        "focus branch" : "Magi",
+        "ability name" : "Arctic Frost",
+        "ability level" : "20",
+        "ability type" : "Ice Blast Damage",
+        "alignment" : "Neutral-Evil",
+        "cost" : "-100 energy", 
+        "effect" :  "+2000 damage / 10m", 
+        "cooldown" : "0:45"
+       }
+
+   ],
+   "inventory":{
+        "currency":{
+           "copper":"0",
+           "silver":"0",
+           "gold":"0",
+           "platinum":"0",
+           "total":"0"
+        },
+        "items":[
+           {
+              "name":"item_name",
+              "type":"item_type",
+              "application":"use_case"
+            }
+        ],
+        "capacity": "0"
+   },
+    "personal":{
+        "personality":{
+            "backstory":"user_in",
+            "goals":"user_in"
+        },
+        "notebook":{
+            "notes_1":"user_in",
+            "notes_2":"user_in"
+        },
+        "quests":[
+            {
+                "name" : "n/a",
+                "party" : "members",
+                "results" : {
+                    "enemies" : "0",
+                    "kd" : "0",
+                    "loot" : "0"
+                },
+                "completed" : "0%"
+            }
+        ]
+    }
+
+}

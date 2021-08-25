@@ -1,0 +1,77 @@
+[
+      {
+        "type" : "Rat",
+        "attack" : "5",
+        "attack_speed" : "5",
+        "health" : "20",
+        "exp" : "5",
+        "items" : "Corpse"
+    },
+    {
+        "type" : "Rat",
+        "attack" : "5",
+        "attack_speed" : "5",
+        "health" : "20",
+        "exp" : "5",
+        "items" : "Corpse"
+    },
+    {
+        "type" : "Snake",
+        "attack" : "20",
+        "attack_speed" : "5",
+        "health" : "30",
+        "exp" : "10",
+        "items" : "Corpse"
+   },
+   {
+        "type" : "Skeleton",
+        "attack" : "40",
+        "attack_speed" : "7",
+        "health" : "250",
+        "exp" : "100",
+        "items" : "Bones"
+    },
+    {
+        "type" : "Skeleton Archer",
+        "attack" : "65",
+        "attack_speed" : "6",
+        "health" : "150",
+        "exp" : "250",
+        "items" : "Bones"
+    },
+    {
+        "type" : "Zombie",
+        "attack" : "80",
+        "attack_speed" : "15",
+        "health" : "600",
+        "exp" : "250",
+        "items" : "Rotten Flesh"
+    
+    },
+    {
+        "type" : "Centaur",
+        "attack" : "240",
+        "attack_speed" : "30",
+        "health" : "1200",
+        "exp" : "500",
+        "items" : "Rotten Flesh"
+    
+    },
+    {
+        "type" : "Dragon",
+        "attack" : "500",
+        "attack_speed" : "20",
+        "health" : "2000",
+        "exp" : "1000",
+        "items" : "Dragon Scale Armor and a Pot of Gold"
+    },
+    {
+        "type" : "Super Evil Bad Guy",
+        "attack" : "1000",
+        "attack_speed" : "2",
+        "health" : "10000",
+        "exp" : "1000000",
+        "items" : "Super Dragon Balls!"
+    }
+
+]

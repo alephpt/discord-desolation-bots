@@ -1,0 +1,133 @@
+{
+    "attack" : {
+        "level" : "0",
+        "branch" : "primary",
+        "alignment" : "none",
+        "skill" : "1",
+        "type" : "attack",
+        "cost" : "-5",
+        "effect" : "+7",
+        "cooldown" : "5"
+    },
+    "melee" : {
+         "basic" : {
+                 "charge" :
+                  {
+                        "level" : "1",
+                        "branch" : "basic",
+                        "alignment" : "none",
+                        "skill" : "1",
+                        "type" : "attack",
+                        "cost" : "-20",
+                        "effect" : "+12",
+                        "cooldown" : "120"
+                 }
+         },
+         "discipline" : {
+                  "paladin" : {
+                      "mastery" : {
+                          "holy" : {},
+                          "purest" : {}
+                      }
+                  }, 
+                  "warrior" : {
+                      "mastery" : {
+                          "noble" : {},
+                          "valiant" : {}
+                      }
+                  },
+                  "brute" : {
+                      "mastery" : {
+                          "hostile" : {},
+                          "savage" : {}
+                      }
+                  },
+                  "assassin" : {
+                      "mastery" : {
+                          "wicked" : {},
+                          "vile" : {}
+                      }
+                  }
+          }
+   },
+    "ranged" : {
+         "basic" : {
+                  "evade" : {
+                        "level" : "1",
+                        "branch" : "basic",
+                        "alignment" : "none",
+                        "skill" : "1",
+                        "type" : "dodge",
+                        "cost" : "-20", 
+                        "effect" : "+12",
+                        "cooldown" : "100"
+                 }
+          },
+          "discipline" : {
+                  "archer" : {
+                      "mastery" : {
+                          "holy" : {},
+                          "purest" : {}
+                      }
+                  }, 
+                  "ranger" : {
+                      "mastery" : {
+                          "noble" : {},
+                          "valiant" : {}
+                      }
+                  },
+                  "amazon" : {
+                      "mastery" : {
+                          "hostile" : {},
+                          "savage" : {}
+                      }
+                  },
+                  "rogue" : {
+                      "mastery" : {
+                          "wicked" : {},
+                          "vile" : {}
+                      }
+                  }
+            }
+    },
+    "magic" : {
+         "basic" : {
+                  "light healing" : {
+                        "level" : "1",
+                        "branch" : "basic",
+                        "alignment" : "none",
+                        "skill" : "1",
+                        "type" : "healing",
+                        "cost" : "-20", 
+                        "effect" : "+12",
+                        "cooldown" : "150"
+                 }
+         },
+          "discipline" : {
+                  "cleric" : {
+                      "mastery" : {
+                          "holy" : {},
+                          "purest" : {}
+                      }
+                  }, 
+                  "sorceress" : {
+                      "mastery" : {
+                          "noble" : {},
+                          "valiant" : {}
+                      }
+                  },
+                  "warlock" : {
+                      "mastery" : {
+                          "hostile" : {},
+                          "savage" : {}
+                      }
+                  },
+                  "necromancer" : {
+                      "mastery" : {
+                          "wicked" : {},
+                          "vile" : {}
+                      }
+                  }
+            }
+     }
+}

@@ -1,8 +1,34 @@
 const support = require('../support/support.js');
 const character = require('../support/json/char.json');
 const focus = require('../support/json/focus.json');
+const db = require('../support/psql/index.js');
 
 embedstring = "";
+
+// char creation support functions
+const filter = m => m;
+let nameset = false;
+
+async function userprompt(msg) {
+    let shortmsg = await msg.channel.awaitMessages(filter, {max: 1});
+    return shortmsg.first().content.toString();
+}
+
+async function getCharName(msg, char_name, nameset) {
+    if (nameset) { return char_name };
+    msg.channel.send('What would you like to name your player?').then(async (start) => {
+        char_name = await userprompt(msg);
+        msg.channel.send("Hello, " + char_name + ".\nAre you happy with this name?").then(async (start) => {
+            let answer = await userprompt(msg)
+            if (answer.toLowerCase() === 'yes') {
+                nameset = true;
+                return char_name;
+            } else {
+                await getCharName(msg, char_name, nameset);
+            }
+        })
+    });
+}
 
 // spans through json data to print all nested object types by key:value pairs
 function spanner(chardat, nest) {
@@ -128,5 +154,22 @@ module.exports = {
             msg.channel.send(embedded)
 
         }
+    },
+
+// TESTIES //
+    addplayer: function (msg) {
+        let player_id = msg.author.id;
+        let char_name = "";
+        let level = 0;
+        let race, focus, mastery, discipline, quest;
+        msg.channel.send('Are you ready?').then(async (start) => {
+            let mymsg = await userprompt(msg);
+            if (mymsg.toLowerCase() === 'yes') {
+                char_name = await getCharName(msg, char_name, nameset);
+            } else 
+            if (mymsg === 'no') {
+                msg.channel.send('Stop Wasting My Time.');
+            } else { msg.channel.send('That isn\'t an option.'); }
+        })
     }
 }

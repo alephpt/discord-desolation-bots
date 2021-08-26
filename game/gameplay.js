@@ -62,7 +62,7 @@ module.exports = {
                     if (enemy.health <= 0) {
                         msg.channel.send("You Killed a " + enemy.type + " and gained " + enemy.exp + ", and found "
                             + enemy.items + "!");
-                        enemy = null;
+                        enemy = {};
                     }
                 }, 1000);
             }

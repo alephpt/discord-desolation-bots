@@ -5,7 +5,7 @@ require('dotenv').config();
 const client = new Discord.Client();
 
 client.on('ready' , () => {
-    console.log('Let The Magic Begin!');
+    console.log('Master of Worlds: \nLet The Magic Begin!');
 });
 
 client.on('message', (msg) => {

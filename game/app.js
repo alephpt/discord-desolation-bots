@@ -5,7 +5,7 @@ require('dotenv').config();
 const client = new Discord.Client();
 
 client.on('ready' , () => {
-    console.log('Play Stupid Games, Get Stupid Prizes!');
+    console.log('Game Master: \nPlay Stupid Games, Get Stupid Prizes!');
 });
 
 client.on('message', (msg) => {

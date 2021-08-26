@@ -5,7 +5,7 @@ require('dotenv').config();
 const client = new Discord.Client();
 
 client.on('ready' , () => {
-    console.log('None Shall Pass!');
+    console.log('Game Keeper: \nNone Shall Pass!');
 });
 
 client.on('message', (msg) => {
@@ -22,6 +22,9 @@ client.on('message', (msg) => {
         case "player":
         case "focus":
             gate.stats(msg, cmd, vars, Discord);
+            break;
+        case "add":
+            gate.addplayer(msg);
             break;
  
     }

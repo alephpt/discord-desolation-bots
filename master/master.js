@@ -34,14 +34,12 @@ module.exports = {
 
 // RUN A COMMAND FOR ABSOLUTELY NO REASON //
     cmd: function(msg, content, client) {
-        test = eval(content);
-        if (test) {
-            try {
-            msg.channel.send(test)
-            }
-            catch(err) {
+        try {
+            test = eval(content);
+            if (typeof test != 'object' && typeof test != 'undefined') { msg.channel.send(test); }
+        } catch(err) {
             msg.channel.send(err);
-            }
         }
     }
+    
 }

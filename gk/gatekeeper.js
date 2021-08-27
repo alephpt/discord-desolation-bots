@@ -10,21 +10,19 @@ const filter = m => m;
 let nameset = false;
 
 async function userprompt(msg) {
-    let shortmsg = await msg.channel.awaitMessages(filter, {max: 1});
-    return shortmsg.first().content.toString();
+    return msg.channel.awaitMessages(filter, {max: 1})
+        .then(result => result.first().content.toString());
 }
 
-async function getCharName(msg, char_name, nameset) {
-    if (nameset) { return char_name };
+async function getCharName(msg) {
     msg.channel.send('What would you like to name your player?').then(async (start) => {
-        char_name = await userprompt(msg);
+        let username = await userprompt(msg);
         msg.channel.send("Hello, " + char_name + ".\nAre you happy with this name?").then(async (start) => {
             let answer = await userprompt(msg)
             if (answer.toLowerCase() === 'yes') {
-                nameset = true;
-                return char_name;
+                return username;
             } else {
-                await getCharName(msg, char_name, nameset);
+                return false;
             }
         })
     });
@@ -159,17 +157,18 @@ module.exports = {
 // TESTIES //
     addplayer: function (msg) {
         let player_id = msg.author.id;
-        let char_name = "";
         let level = 0;
-        let race, focus, mastery, discipline, quest;
+        let char_name, race, focus, mastery, discipline, quest;
         msg.channel.send('Are you ready?').then(async (start) => {
-            let mymsg = await userprompt(msg);
-            if (mymsg.toLowerCase() === 'yes') {
-                char_name = await getCharName(msg, char_name, nameset);
-            } else 
-            if (mymsg === 'no') {
-                msg.channel.send('Stop Wasting My Time.');
-            } else { msg.channel.send('That isn\'t an option.'); }
+            userprompt(msg).then( mymsg => {
+                if (mymsg === 'yes') {
+                    while (!char_name) {getCharName(msg).then(result => char_name = result)};
+                    msg.channel.send(char_name + ", I think it worked?")
+                } else 
+                if (mymsg === 'no') {
+                    msg.channel.send('Stop Wasting My Time.');
+                } else { msg.channel.send('That isn\'t an option.'); }
+            })
         })
     }
 }

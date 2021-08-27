@@ -5,7 +5,7 @@ require('dotenv').config();
 const client = new Discord.Client();
 
 client.on('ready' , () => {
-    console.log('Game Keeper: \nNone Shall Pass!');
+    console.log('Gate Keeper: \nNone Shall Pass!');
 });
 
 client.on('message', (msg) => {

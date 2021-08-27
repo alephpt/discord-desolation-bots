@@ -9,40 +9,25 @@ embedstring = "";
 const filter = m => m;
 let nameset = false;
 
-let playerType = {
-    "id" : "0",
-    "char_name" : "prisma",
-    "level" : "1",
-    "race" : "none",
-    "focus" : "none",
-    "master" : "none",
-    "discipline" : "none"
-}
-
 async function userprompt(msg) {
     let shortmsg = await msg.channel.awaitMessages(filter, {max: 1});
     return shortmsg.first().content.toString();
 }
 
-async function getCharName(msg, char_name) {
-    if (!nameset) {
-        msg.channel.send('What would you like to name your player?').then(async () => {
-            userprompt(msg).then(async username => {
-                char_name = username;
-                msg.channel.send("Hello, " + char_name + ".\nAre you happy with this name?").then( async () => {
-                    userprompt(msg).then( async answer => {
-                        if (answer.toLowerCase() === 'yes') {
-                            nameset = true;
-                            return char_name;
-                        } else {
-                            nameset = false;
-                            getCharName(msg, char_name);
-                        }
-                    });
-                });
-             });
-        });
-    } else { return char_name; }
+async function getCharName(msg, char_name, nameset) {
+    if (nameset) { return char_name };
+    msg.channel.send('What would you like to name your player?').then(async (start) => {
+        char_name = await userprompt(msg);
+        msg.channel.send("Hello, " + char_name + ".\nAre you happy with this name?").then(async (start) => {
+            let answer = await userprompt(msg)
+            if (answer.toLowerCase() === 'yes') {
+                nameset = true;
+                return char_name;
+            } else {
+                await getCharName(msg, char_name, nameset);
+            }
+        })
+    });
 }
 
 // spans through json data to print all nested object types by key:value pairs
@@ -173,19 +158,19 @@ module.exports = {
 
 // TESTIES //
     addplayer: function (msg) {
-        let player = playerType;
-        nameset = false;
+        let player_id = msg.author.id;
+        let char_name = "";
+        let level = 0;
+        let race, focus, mastery, discipline, quest;
         msg.channel.send('Are you ready?').then(async (start) => {
-            userprompt(msg).then( async mymsg => {
-                if (mymsg.toLowerCase() === 'yes'){
-                    getCharName(msg, player.char_name).then(async name => { player.char_name = await name; })
-                } else 
-                if (mymsg === 'no') {
-                    msg.channel.send('Stop Wasting My Time.');
-                } else { msg.channel.send('That isn\'t an option.'); }
-            
-            });
-        });
+            let mymsg = await userprompt(msg);
+            if (mymsg.toLowerCase() === 'yes') {
+                char_name = await getCharName(msg, char_name, nameset);
+            } else 
+            if (mymsg === 'no') {
+                msg.channel.send('Stop Wasting My Time.');
+            } else { msg.channel.send('That isn\'t an option.'); }
+        })
     }
 }
 

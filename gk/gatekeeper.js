@@ -47,7 +47,7 @@ module.exports = {
         member.roles.add(support.roles("birth"));
 
         channelid.then(function(result) {
-            client.channels.cache.get(result.id).send("<@" + msg.author.id + ">.. Let us begin our journey!");
+            client.channels.cache.get(result.id).send("<@" + msg.author.id + ">.. Let us begin our journey!\n Type `.add` to create your player.");
         })
     },
 
@@ -162,7 +162,8 @@ module.exports = {
             // get character name
             thisPlayer.char_name = await thisPlayer.getCharName(msg);
             if (thisPlayer.char_name) { 
-                await msg.channel.send("well.. let's get started " + thisPlayer.char_name); 
+//                await msg.channel.send("well.. let's get started " + thisPlayer.char_name); 
+                thisPlayer.race = await thisPlayer.getRace(msg);
             } 
         } else if (shortmsg.toLowerCase() === 'no') {
             msg.channel.send('Stop Wasting My Time.');

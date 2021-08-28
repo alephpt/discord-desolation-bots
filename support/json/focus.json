@@ -25,30 +25,22 @@
          },
          "discipline" : {
                   "paladin" : {
-                      "mastery" : {
                           "holy" : {},
                           "purest" : {}
-                      }
                   }, 
                   "warrior" : {
-                      "mastery" : {
                           "noble" : {},
                           "valiant" : {}
-                      }
                   },
-                  "brute" : {
-                      "mastery" : {
+                  "berserker" : {
                           "hostile" : {},
                           "savage" : {}
-                      }
                   },
                   "assassin" : {
-                      "mastery" : {
                           "wicked" : {},
                           "vile" : {}
-                      }
                   }
-          }
+         }
    },
     "ranged" : {
          "basic" : {
@@ -65,30 +57,22 @@
           },
           "discipline" : {
                   "archer" : {
-                      "mastery" : {
                           "holy" : {},
                           "purest" : {}
-                      }
                   }, 
                   "ranger" : {
-                      "mastery" : {
                           "noble" : {},
                           "valiant" : {}
-                      }
                   },
                   "amazon" : {
-                      "mastery" : {
                           "hostile" : {},
                           "savage" : {}
-                      }
                   },
                   "rogue" : {
-                      "mastery" : {
                           "wicked" : {},
                           "vile" : {}
-                      }
                   }
-            }
+          }
     },
     "magic" : {
          "basic" : {
@@ -105,22 +89,16 @@
          },
           "discipline" : {
                   "cleric" : {
-                      "mastery" : {
                           "holy" : {},
                           "purest" : {}
-                      }
                   }, 
                   "sorceress" : {
-                      "mastery" : {
                           "noble" : {},
                           "valiant" : {}
-                      }
                   },
                   "warlock" : {
-                      "mastery" : {
                           "hostile" : {},
                           "savage" : {}
-                      }
                   },
                   "necromancer" : {
                       "mastery" : {
@@ -128,6 +106,6 @@
                           "vile" : {}
                       }
                   }
-            }
-     }
+          }
+    }
 }

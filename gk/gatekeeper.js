@@ -1,49 +1,10 @@
+const player = require('./player.js');
 const support = require('../support/support.js');
 const character = require('../support/json/char.json');
 const focus = require('../support/json/focus.json');
 const db = require('../support/psql/index.js');
 
 embedstring = "";
-
-// char creation support functions
-const filter = m => m;
-let nameset = false;
-
-let playerType = {
-    "id" : "0",
-    "char_name" : "prisma",
-    "level" : "1",
-    "race" : "none",
-    "focus" : "none",
-    "master" : "none",
-    "discipline" : "none"
-}
-
-async function userprompt(msg) {
-    let shortmsg = await msg.channel.awaitMessages(filter, {max: 1});
-    return shortmsg.first().content.toString();
-}
-
-async function getCharName(msg, char_name) {
-    if (!nameset) {
-        msg.channel.send('What would you like to name your player?').then(async () => {
-            userprompt(msg).then(async username => {
-                char_name = username;
-                msg.channel.send("Hello, " + char_name + ".\nAre you happy with this name?").then( async () => {
-                    userprompt(msg).then( async answer => {
-                        if (answer.toLowerCase() === 'yes') {
-                            nameset = true;
-                            return char_name;
-                        } else {
-                            nameset = false;
-                            getCharName(msg, char_name);
-                        }
-                    });
-                });
-             });
-        });
-    } else { return char_name; }
-}
 
 // spans through json data to print all nested object types by key:value pairs
 function spanner(chardat, nest) {
@@ -122,19 +83,27 @@ module.exports = {
         // intialize embed string to blank state
         embedstring = "";
         let header;
-        let body;
+        let body, footer, statdata;
         let nest = "";
 
         if (userInput) {
-            section = userInput.split(" ")
+            let section = userInput.split(" ")
             if(header = section[0]) {
                 if (statdat?.[section[1]] || statdat?.[header]?.[section[1]]) {
                 body = section[1];
+                    if (statdat?.[body]?.[section[2]]) {
+                        footer = section[2];
+                    } 
                 }
                 if (header === "help") {
                     if (body) {
                         embedstring = "The available " + body + " sections are:"
-                        for(key in statdat[body]) {
+                        if (footer) {
+                            statdata = statdat[body][footer];
+                        } else {
+                            statdata = statdat[body];
+                        }
+                        for(key in statdata) {
                             embedstring = embedstring + "\n  **" + key.toUpperCase() + "**";
                         }
                     } else {
@@ -171,21 +140,35 @@ module.exports = {
         }
     },
 
-// TESTIES //
-    addplayer: function (msg) {
-        let player = playerType;
-        nameset = false;
-        msg.channel.send('Are you ready?').then(async (start) => {
-            userprompt(msg).then( async mymsg => {
-                if (mymsg.toLowerCase() === 'yes'){
-                    getCharName(msg, player.char_name).then(async name => { player.char_name = await name; })
-                } else 
-                if (mymsg === 'no') {
-                    msg.channel.send('Stop Wasting My Time.');
-                } else { msg.channel.send('That isn\'t an option.'); }
+// TESTIES //)
+    addplayer: async function (msg) {
+       
+        // start character creation
+        await msg.channel.send("Are you ready?");
+        let shortmsg = await support.userprompt(msg);
+
+        if (!shortmsg) {
+            await msg.channel.send("Your response time is too slow.. try paying attention this time.");
+            return;
+        } else
+
+        if (shortmsg.toLowerCase() === 'yes') {
+            // instantiate player class
+            let thisPlayer = new player.Type();
             
-            });
-        });
+            // get player id
+            thisPlayer.player_id = msg.author.id;
+
+            // get character name
+            thisPlayer.char_name = await thisPlayer.getCharName(msg);
+            if (thisPlayer.char_name) { 
+                await msg.channel.send("well.. let's get started " + thisPlayer.char_name); 
+            } 
+        } else if (shortmsg.toLowerCase() === 'no') {
+            msg.channel.send('Stop Wasting My Time.');
+        } else {
+            msg.channel.send('That isn\'t an option.');
+        }
     }
 }
 

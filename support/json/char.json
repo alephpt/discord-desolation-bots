@@ -1,47 +1,39 @@
 
     {
     "info":{
-        "char_name":"user_in",
-        "player_name":"discord_in",
-        "alignment":"focus_alignment",
+        "player_name":"this.player_id",
+        "char_name":"thisPlayer.char_name",
+        "level":"thisPlayer.level",
         "race":[
-            "Humans",
-            "Elves",
-            "Dwarves",
-            "Lycans",
+            "Human",
+            "Wood Elf",
+            "Dark Elf",
+            "Dwarve",
+            "Lycan",
             "Alkonost",
-            "Half-Blood",
-            "Undead"
+            "Half-Blood"
         ],
-        "focus":["Melee", "Ranged", "Magic"],
-        "mastery":"focus_primary",
-        "discipline":"focus_secondary"
+        "alignment":"this.Player.Focus.Alignment",
+        "mastery":"thisPlayer.Focus.Level.Max",
+        "discipline":"thisPlayer.Focus.Level.Secondary"
     },
     "stats":{
-        "level":"0",
-        "exp":"0",
-        "conditions":"effects",
-        "current_health":"max_health + (recovery * stamina)",
-        "current_energy":"max_health + (recovery * stamina)",
+        "exp":"thisPlayer.exp",
+        "exp_to_next_level":"Level[thisPlayer.level + 1].exp - thisPlayer.exp",
+        "conditions":"thisPlayer.Conditions",
+        "current_health":"thisPlayer.MaxHealth - damange + (recovery * stamina)",
+        "current_energy":"thisPlayer.MaxEnergy - ability.Cost + (recovery * stamina)",
         "max_health":"race + strength + dexterity + stamina + level_modifier",
         "max_energy":"class + stamina + agility + intelligence + level_modifier",
         "attack":"race + class + ability + skills + equipment",
         "defense":"race + strength + dexterity + equipment",
-        "mobility":"stamina + agility + capacity"
-    },
-    "capability":{
-         "strength":"default or 4d6",
-         "strength_bonus":"strength",
-         "dexterity":"default or 4d6",
-         "dexterity_bonus":"dexterity",
-         "stamina":"default or 4d6",
-         "stamina_bonus":"stamina",
-         "agility":"default or 4d6",
-         "agility_mod":"agility",
-         "intelligence":"default or 4d6",
-         "intelligence_mod":"intelligence"
+        "strength":"default or 4d6 + level.multiplier + race.perk",
+        "dexterity":"default or 4d6 + level.multiplier + race.perk",
+        "stamina":"default or 4d6 + level.multiplier + race.perk",
+        "agility":"default or 4d6 + level.multiplier + race.perk",
+        "intelligence":"default or 4d6 + level.multiplier + race.perk"
    },
-   "focus" : [
+   "Abilities" : [
        {
         "focus level" : "3",
         "focus branch" : "Melee",
@@ -55,7 +47,7 @@
        },
        {
         "focus level" : "17",
-        "focus branch" : "Magi",
+        "focus branch" : "Magic",
         "ability name" : "Arctic Frost",
         "ability level" : "20",
         "ability type" : "Ice Blast Damage",

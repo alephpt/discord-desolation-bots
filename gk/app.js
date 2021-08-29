@@ -9,7 +9,9 @@ client.on('ready' , () => {
 });
 
 client.on('message', (msg) => {
-    const [, cmd, vars] = msg.content.toLowerCase().match(/^(?:\.(\S+)(?:\s+(.+))?$)?/s);
+    let [, cmd, vars] = msg.content.match(/^(?:\.(\S+)(?:\s+(.+))?$)?/s);
+    
+    if (cmd) { cmd = cmd.toLowerCase() }
 
     switch (cmd) {
 // CHARACTER CREATION PROCESS//
@@ -21,10 +23,22 @@ client.on('message', (msg) => {
             break;
         case "player":
         case "focus":
-            gate.stats(msg, cmd, vars, Discord);
+            gate.stats(msg, cmd, vars);
             break;
         case "add":
+            gate.addchar(msg);
+            break;
+        case "getplayer":
+            gate.getplayer(msg);
+            break;
+        case "addplayer":
             gate.addplayer(msg);
+            break;
+        case "delplayer":
+            gate.delplayer(msg);
+            break;
+        case "delchar":
+            gate.delchar(msg, vars);
             break;
  
     }

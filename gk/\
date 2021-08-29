@@ -1,0 +1,18 @@
+const db = require ('../support/psql/index.js');
+
+module.exports = {
+    getPlayerData: async function (msg) {
+        let playerdata = await db.getPlayer(msg.author.id);
+        return playerdata;
+    },
+    addPlayerData: async function (player_id, char_count, characters) {
+        let newplayer = {
+            "id" : player_id,
+            "char_ct" : char_count,
+            "characters" : characters
+        };
+
+        let newplayer = await addNewPlayer(newplayer);
+        return newplayer;
+    }
+}

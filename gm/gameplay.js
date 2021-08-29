@@ -3,32 +3,6 @@ const enemies = require("../support/json/enemy.json");
 let enemy = {};
 
 module.exports = {
-// ROLL THE DIE //
-    throwdie: function(msg, die) {
-        if (die) {
-            dieCount = parseInt(die.slice(0, 1), 10);
-            dieSides = parseInt(die.slice(2, die.length), 10);
-
-            diestring = "You rolled "
-            lowest = dieSides;
-            totalroll = 0;
-
-            for (var i = 0; i < dieCount; ++i) {
-                roll = Math.floor(Math.random() * dieSides) + 1;
-            
-                if (roll < lowest) { lowest = roll; };
-
-                totalroll += roll;
-                if (i < dieCount - 1 ) { diestring = diestring + roll + ", "; }
-                else { diestring = diestring + "and " + roll; }
-            }
-   
-            msg.channel.send(diestring);
-            msg.channel.send("Roll Total: " + totalroll + "\nTop " + (dieCount - 1) + " Total: " + (totalroll - lowest));
-        } else { 
-        msg.channel.send("Please enter a valid input i.e. `3d8`, `2d6`, `7d4`, etc.");
-        }
-    },
 
 // attack function
     attack: function(msg, cmd) {
@@ -76,4 +50,5 @@ module.exports = {
         enemy = enemies[Math.floor(Math.random() * enemies.length)];
         msg.channel.send("A wild " + enemy.type + " appeared! Gotta Catch Em All!");
     }
+
 }

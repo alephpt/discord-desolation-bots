@@ -10,26 +10,8 @@ const creds = {
 
 const pool = new Pool(creds);
 
-/*
-async function poolDemo(){
-    const now = await pool.query("SELECT NOW()");
-    await pool.end();
-
-    return now;
-}
-
-async function clientDemo(){
-    const client = new Client(creds);
-    await client.connect();
-    const now = await client.query("SELECT NOW()");
-    await client.end();
-
-    return now;
-}
-*/
-
 module.exports = {
-    addPlayer: function (player) {
+    addNewPlayer: function (player) {
         const text = `
             INSERT INTO players (player_id, char_name, level, race, focus, mastery, discipline, quest)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)

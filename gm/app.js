@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 const gameplay = require('./gameplay.js');
+const map = require("./map.js")
+const support = require('../support/support.js')
 require('dotenv').config();
 
 const client = new Discord.Client();
@@ -16,7 +18,7 @@ client.on('message', (msg) => {
         case "roll":
             msg.channel.send("Rolling...")
             setTimeout(function () {
-                gameplay.throwdie(msg, vars)
+                support.roll(msg, vars)
             }, 2000);
             break;
         case "kamehameha":
@@ -26,7 +28,15 @@ client.on('message', (msg) => {
         case "spawn":
             gameplay.spawn(msg);
             break;
-
+        case "map":
+            map.draw(msg);
+            break;
+        case "move":
+            map.move(msg, vars);
+            break;
+        case "respawn":
+            map.respawn(msg);
+            break;
     }
 });
 

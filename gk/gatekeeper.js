@@ -87,7 +87,7 @@ module.exports = {
         let nest = "";
 
         if (userInput) {
-            let section = userInput.split(" ")
+            let section = userInput.split(" ");
             if(header = section[0]) {
                 if (statdat?.[section[1]] || statdat?.[header]?.[section[1]]) {
                 body = section[1];

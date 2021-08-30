@@ -15,18 +15,18 @@ client.on('message', (msg) => {
 
     switch (cmd) {
 // CHARACTER CREATION PROCESS//
-        case "begin":
-            gate.create(msg, client);
-            break;
         case "start":
-            gate.birth(msg, client);
+            gate.char_create(msg, client);
+            break;
+        case "create":
+            gate.addchar(msg);
+            break;       
+        case "join":
+            gate.join(msg, client);
             break;
         case "player":
         case "focus":
             gate.stats(msg, cmd, vars);
-            break;
-        case "add":
-            gate.addchar(msg);
             break;
         case "getplayer":
             gate.getplayer(msg);
@@ -37,10 +37,15 @@ client.on('message', (msg) => {
         case "delplayer":
             gate.delplayer(msg);
             break;
+        case "getchar":
+            gate.getchar(msg);
+            break;
         case "delchar":
             gate.delchar(msg, vars);
             break;
- 
+        case "log":
+            gate.log(msg);
+            break;
     }
 });
 

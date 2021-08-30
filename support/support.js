@@ -1,4 +1,7 @@
-
+const map = {
+    "width" : 100,
+    "height" : 50
+};
 
 module.exports = {
     // gimme roles
@@ -20,9 +23,22 @@ module.exports = {
     userprompt: async function (msg) {
         let result = false;
         await msg.channel.awaitMessages(m => m.author.id === msg.author.id, {max: 1, time: 30000})
-            .then(shortmsg => {
-                result = shortmsg.first().content;
+            .then(async shortmsg => {
+                result = await shortmsg.first().content;
             }).catch(() => {});      
+        return result;
+    },
+
+    reactprompt: async function (msg) {
+        let result = await msg.awaitReactions(m => m, {max: 1, time: 30000})
+            .then(collected => {
+                let reaction = collected.first();
+                if (reaction) {
+                    return reaction._emoji.name;
+                } else {
+                    return false;
+                }
+            }).catch(() => {});
         return result;
     },
 
@@ -54,5 +70,36 @@ module.exports = {
         } else {
         msg.channel.send("Please enter a valid input i.e. `3d8`, `2d6`, `7d4`, etc.");
         }
+    },
+
+    // create channel for character creation
+    createChannel: function(msg) {
+        channelName = msg.author.tag + " Character Creation"
+        channelID = msg.guild.channels.create(channelName, {
+            type: 'text',
+            parent: '877407686700982362',
+            permissionOverwrites:[
+            { // everyone
+                id: '876270357236023316',
+                deny:['VIEW_CHANNEL'],
+            },
+            { // moderator
+                id: '876288940351553558',
+                allow: ['VIEW_CHANNEL'],
+            },
+            { // user
+                id: msg.author.id,
+                allow: ['VIEW_CHANNEL']
+            }]
+        });
+        return channelID
+    },
+
+    locIndex: function(x, y) {
+        return (y * map.width + x);
+    },
+
+    xyVals: function (index) {
+        return [(Math.floor(index % map.width)), (Math.floor(index / map.width))];
     }
 }

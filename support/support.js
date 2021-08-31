@@ -101,5 +101,22 @@ module.exports = {
 
     xyVals: function (index) {
         return [(Math.floor(index % map.width)), (Math.floor(index / map.width))];
+    },
+
+    looper: async function (func) {
+        let value = await func();
+        if (value) { return value; }
+        else { await this.looper(func); }
+    },
+
+    checkList: function (input, list) {
+        console.log("List Leng: " + list.length)
+        for (let i = 0; i < list.length; i++){
+            console.log("check: " + list[i]);
+            if (input.toLowerCase() == list[i].toLowerCase()) {
+                return input;
+            }
+        }
+        return false;
     }
 }

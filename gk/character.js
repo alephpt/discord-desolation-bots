@@ -52,7 +52,7 @@ module.exports = {
                 return false;
             }
        }
-
+  
         async getSex(msg){
             const filter = (reaction, user) => user.id == msg.author.id;
             
@@ -82,13 +82,18 @@ module.exports = {
             let racestring = "";
             for (let races of character.info.race) { racestring = racestring + " - " + races + "\n"};
 
-            await msg.channel.send("In this world, there are many types of creatures .. \n```" + racestring + "``` Which are you?");
-            let response = await support.userprompt(msg);
-            if(!response) {
-                await msg.channel.send('Time Out!');
-            } else {
-                return response;
+            msg.channel.send("In this world, there are many types of creatures .. ");
+            
+            async function test(){ 
+                await msg.channel.send("```" + racestring + "``` Which are you?");
+                let response = await support.userprompt(msg);
+                let race = await support.checkList(response, character.info.race);
+                if (race) { return race; }
+                else { msg.channel.send("That's not right. Try again."); }
             }
+
+            let result = await support.looper(test);
+            return result;
         }
 
     }

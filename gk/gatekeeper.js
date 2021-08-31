@@ -1,31 +1,13 @@
 const Discord = require('discord.js');
 const player = require('./player.js');
 const character = require('./character.js');
+const chardat = require('../support/json/char.json')
 const support = require('../support/support.js');
-const chardata = require('../support/json/char.json');
-const focus = require('../support/json/focus.json');
 const db = require('../support/psql/index.js');
-
-embedstring = "";
-
-// spans through json data to print all nested object types by key:value pairs
-function spanner(chardat, nest) {
-    nest = nest + "-";
-
-    Object.keys(chardat).forEach((key) => {
-        if (typeof chardat[key] == 'string') {
-            embedstring = embedstring + "\n " + nest + " __" + key.toUpperCase() + "__: " + chardat[key];
-        } else {
-            embedstring = embedstring + "\n\n " + nest + " **"  + key.toUpperCase() + "**: "
-            spanner(chardat[key], nest);
-        }
-    })
-}
-
 
 module.exports = {
 // CREATE CHARACTER DATA //
-    char_create: async function(msg, client) {
+    create: async function(msg, client) {
         let welcome = "";
 
         let channelID = support.createChannel(msg);
@@ -38,7 +20,7 @@ module.exports = {
         }
 
         channelID.then(function(result) {
-            client.channels.cache.get(result.id).send(welcome + "Type `.create` to get started your player.");
+            client.channels.cache.get(result.id).send(welcome + "Type `.create` to create your player.");
         })
     },
 
@@ -56,80 +38,6 @@ module.exports = {
             chan.delete();
         }
 
-    },
-
-// GIVE ME PLAYER DATA //
-    stats: function(msg, cmd, userInput) {
-        let statdat = {};
-        let Title = "";
-        if (cmd == "player") {
-            statdat = chardata;
-            Title = "Character Sheet";
-            }
-        if (cmd == "focus") {
-            statdat = focus;
-            Title = "Focus Tree";
-        }
-
-
-        // intialize embed string to blank state
-        embedstring = "";
-        let header;
-        let body, footer, statdata;
-        let nest = "";
-
-        if (userInput) {
-            let section = userInput.split(" ");
-            if(header = section[0]) {
-                if (statdat?.[section[1]] || statdat?.[header]?.[section[1]]) {
-                body = section[1];
-                    if (statdat?.[body]?.[section[2]]) {
-                        footer = section[2];
-                    } 
-                }
-                if (header === "help") {
-                    if (body) {
-                        embedstring = "The available " + body + " sections are:"
-                        if (footer) {
-                            statdata = statdat[body][footer];
-                        } else {
-                            statdata = statdat[body];
-                        }
-                        for(key in statdata) {
-                            embedstring = embedstring + "\n  **" + key.toUpperCase() + "**";
-                        }
-                    } else {
-                        embedstring = "The available " + cmd + " sections are:"
-                        for (key in statdat) {
-                            embedstring = embedstring + "\n - **" + key.toUpperCase() + "**";
-                        }
-                    }
-                }
-                else if (statdat[header]) {
-                    if(body) {
-                        spanner(statdat[header][body], nest);
-                        header += " " + body;
-                    } else {
-                        spanner(statdat[header], nest);
-                    }
-                }
-                if (header === "help" || statdat[header] || body){
-                     embedded = new Discord.MessageEmbed()
-                        .setTitle(header.toUpperCase())
-                        .setDescription( embedstring );
-                   msg.channel.send(embedded)
-                } else {
-                    msg.channel.send("Invalid Player Input.")
-                }
-            }
-        } else {
-            spanner(statdat, nest);
-            embedded = new Discord.MessageEmbed()
-                .setTitle(Title)
-                .setDescription( embedstring );
-            msg.channel.send(embedded)
-
-        }
     },
 
 // TESTIES //)
@@ -163,6 +71,36 @@ module.exports = {
                         // get character race
                         if (thisChar.sex) {
                             thisChar.race = await thisChar.getRace(msg);
+                            
+                            // populate beginner attributes
+                            if(thisChar.race) {
+                                thisChar.level = 1;
+                                thisChar.world = "starter";
+                                thisChar.loc = support.locIndex(20, 20);
+                                thisChar.discipline = 'none';
+                                thisChar.mastery = 'locked';
+                                thisChar.alignment = 'neutral';
+                                thisChar.group_name = 'none';
+                                thisChar.quest_current = ['Genesis'];
+                                thisChar.clan = 'none';
+
+                                // UPDATE DATABASE //
+                                let char_id = await db.getCharID(msg.author.id, thisChar.char_name);
+                                if (char_id) {
+                                    if (thisChar.char_name != false) {
+                                        // add new character to database
+                                        await db.addNewChar(thisChar);
+
+                                        // set new character as active character
+                                        let activechar = await db.setActiveChar(msg.author.id, thisChar.char_name);
+
+                                        // update players character list
+                                        await player.updateCharNames(msg.author.id);
+
+                                        await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
+                                    }
+                                } 
+                            }
                         } else {
                             msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
                         }
@@ -170,35 +108,9 @@ module.exports = {
                         msg.channel.send("You failed the simplest of tasks.\nStart over.");
                     }
 
-                    // populate beginner attributes
-                    if(thisChar.race) {
-                        thisChar.level = 1;
-                        thisChar.world = "starter";
-                        thisChar.loc = support.locIndex(20, 20);
-                        thisChar.discipline = 'none';
-                        thisChar.mastery = 'locked';
-                        thisChar.alignment = 'neutral';
-                        thisChar.group_name = 'none';
-                        thisChar.quest_current = ['Genesis'];
-                        thisChar.clan = 'none';
-                    }
+                   
 
-                // UPDATE DATABASE //
-                    // add new character to database
-                    await db.addNewChar(thisChar);
-                    
-                    // set new character as active character
-                    let activechar = await db.setActiveChar(msg.author.id, thisChar.char_name);
-                    if (activechar){
-                        await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
-                    }
-
-                    // update players character list
-                    let char_id = await db.getCharID(msg.author.id, thisChar.char_name);
-                    if (char_id) {
-                        await player.updateCharNames(msg.author.id);
-                    }
-                } else if (shortmsg.toLowerCase() === 'no') {
+                               } else if (shortmsg.toLowerCase() === 'no') {
                     msg.channel.send("Stop Wasting My Time.");
                 } else {
                     msg.channel.send("That isn\'t an option.");
@@ -215,9 +127,10 @@ module.exports = {
    },
 
     log: async function(msg) {
-        let stuff = await player.updateCharNames(msg.author.id); 
-        msg.channel.send("Chars: " + stuff);
-        console.log(stuff);  
+        let charac = new character.Type();
+        await msg.channel.send("go for it");
+        let stuff = await charac.getRace(msg);
+        await msg.channel.send("Test: \n" + stuff);
     },
 
 // DB HANDLERS //
@@ -231,11 +144,37 @@ module.exports = {
         }
     },
 
-    // get player info from database
+    // get player info from databa)e
     getplayer: async function(msg) {
+        embedstring = "";
         let playerdat = await player.getPlayerData(msg.author.id);
+        
+        if (playerdat) {
+            embedstring += "```\n";
+            for (let keys in playerdat) {
+                let charstring = "";
+                if (keys === 'characters') {
+                    embedstring += keys + ": ";
+                    for (let charid in playerdat[keys]) {
+                        let charname = await db.charID2Name(playerdat[keys][charid])
+                        embedstring += charname.rows[0].char_name + " ";
+                    }
+                    embedstring += "\n"
+                }
+                else if (keys !== 'id' && keys !== 'player_id') {
+                    embedstring += keys + ": " + playerdat[keys] + "\n"
+                } 
+            }
+            embedstring += "```\n";
+            
+            embedded = new Discord.MessageEmbed()
+               .setTitle(msg.author.tag + " Player Data")
+               .setDescription( embedstring );
 
-        msg.channel.send(playerdat);
+            msg.channel.send(embedded);    
+        } else {
+            msg.channel.send("You are not a player");
+        }
     },
 
     // delete player from database

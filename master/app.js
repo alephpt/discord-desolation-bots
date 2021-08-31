@@ -28,6 +28,10 @@ client.on('message', (msg) => {
         case "cmd":
             fun.cmd(msg, vars, client);
             break;
+        case "chtab":
+        case "ftab":
+            fun.stats(msg, cmd, vars);
+            break
     }
 });
 

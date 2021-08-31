@@ -14,10 +14,10 @@ const client = new Client(creds);
 module.exports = {
     addPlayer: async function (player) {
         const text = `
-            INSERT INTO player_data (player_id, char_count, join_date)
-            VALUES ($1, $2, NOW()::DATE)
+            INSERT INTO player_data (player_id, join_date)
+            VALUES ($1, NOW()::DATE)
         `;
-        const values = [player.id, player.char_count];
+        const values = [player.id];
         let newplayer = await pool.query(text, values);
         return newplayer;
     },
@@ -64,6 +64,13 @@ module.exports = {
         const player = [playerid];
         const chardata = await pool.query(text, player);
         return chardata;
+    },
+
+    charID2Name: async function (char_id) {
+        const text = `SELECT char_name FROM char_data WHERE id = $1`;
+        const charid = [char_id];
+        const charname = await pool.query(text, charid);
+        return charname;
     },
 
     changeCharacterName: function (playerid, newname) {

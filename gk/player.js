@@ -7,7 +7,7 @@ module.exports = {
         let playerdata = await db.getPlayer(id);
         if ( playerdata.rows[0]?.player_id === id ) {
             //return JSON.stringify(playerdata.rows);
-            return JSON.stringify(playerdata.rows[0]);
+            return playerdata.rows[0];
         } else {
             return false;
         }

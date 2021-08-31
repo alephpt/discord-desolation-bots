@@ -3,3 +3,4 @@
 *.env
 .bup
 */.bup
+node_modules

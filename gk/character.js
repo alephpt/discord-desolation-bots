@@ -25,32 +25,29 @@ module.exports = {
 
         // get character name
         async getCharName(msg) {
-            await msg.channel.send('What should we call you?');
-            let char_name = await support.userprompt(msg);
-            if (!char_name) {
-                await msg.channel.send('Timed out...');
-                return false;
-            }
-            let naming = await msg.channel.send("Well Hello, " + char_name + ". \nDid I get that right?");
-            await naming.react('👍');
-            await naming.react('👎');
+            async function getname(){
+                await msg.channel.send('Hello, What should we call you?');
+                let char_name = await support.userprompt(msg);
+                if (!char_name) {
+                    await msg.channel.send('Timed out...');
+                    return false;
+                }
+    
+                await msg.channel.send("So it's " + char_name + "..? \nDid I get that right?");
+                let response = await support.userprompt(msg);
 
-            let name = await support.reactprompt(naming);
-            await console.log(name);
-            if (!name) {
-                await msg.channel.send('Timed out...');
-                return false;
+                if (!response) {
+                    await msg.channel.send('Timed out...');
+                    return false;
+                } else {
+                    let confirmed = await support.compare(response[0].toLowerCase(), 'y');
+                    if (confirmed) {
+                        return char_name;
+                    }
+                }
             }
-            
-            if (name === '👍') {
-                return char_name; 
-            } else
-            if (name === '👎') {
-                char_name = await this.getCharName(msg);
-                return char_name;
-            }  else {
-                return false;
-            }
+            let result = support.looper(getname);
+            return result;
        }
   
         async getSex(msg){
@@ -87,9 +84,12 @@ module.exports = {
             async function test(){ 
                 await msg.channel.send("```" + racestring + "``` Which are you?");
                 let response = await support.userprompt(msg);
-                let race = await support.checkList(response, character.info.race);
-                if (race) { return race; }
-                else { msg.channel.send("That's not right. Try again."); }
+                let race = await support.compare(response, character.info.race);
+                if (race) { return race; } 
+                else { 
+                    msg.channel.send("That's not right. Try again."); 
+                    return false;
+                }
             }
 
             let result = await support.looper(test);

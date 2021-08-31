@@ -3,10 +3,9 @@ const db = require ('../support/psql/index.js');
 
 module.exports = {
     // returns player json obj from player_data if it exists
-    getPlayerData: async function (id) {
+    async getPlayerData (id) {
         let playerdata = await db.getPlayer(id);
         if ( playerdata.rows[0]?.player_id === id ) {
-            //return JSON.stringify(playerdata.rows);
             return playerdata.rows[0];
         } else {
             return false;
@@ -14,7 +13,7 @@ module.exports = {
     },
     
     // inserts player data into player_data
-    addPlayerData: async function (id) {
+    async addPlayerData (id) {
         let playerdata = await db.getPlayer(id);
         if ( playerdata.rows[0]?.player_id !== id ) {
             let playerdata = {
@@ -34,17 +33,6 @@ module.exports = {
         return char_count.rowCount;
     },
 
-/*
-    // returns specific count of arbitrary constraints
-    async getCount(id, table, column){
-        let values = await db.getCount(id, table, column);
-        if(values?.rows[0]?.cardinality) {
-            return values.rows[0].cardinality;
-        } else {
-            return false;
-        }
-    },
-*/
     // update character list in player_data
     async updateCharNames (id) {
         let charr = [];
@@ -65,5 +53,20 @@ module.exports = {
         }
         let update = await db.updateCharNames(id, charr);
         return update;
+    },
+
+    async updateActiveChar (id) {
+        let result;
+        let activeChar = await db.getActiveChar(id);
+        let chars = await db.getCharacters(id);
+        let char_count = await chars.rowCount;
+
+        if (char_count === 0) {
+            result = await db.setActiveChar(id, null);
+        } else {
+            let charname = await db.charID2Name(chars.rows[0].id)
+            result = await db.setActiveChar(id, charname.rows[0].char_name);
+        }      
+        return result;
     }
 }

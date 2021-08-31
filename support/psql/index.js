@@ -98,6 +98,13 @@ module.exports = {
         let charid = await pool.query(text, player);
         return charid;
     },
+
+    getActiveChar: async function (playerid) {
+        const text = `SELECT active_char FROM player_data WHERE player_id = $1`;
+        const player = [playerid];
+        let activechar = await pool.query(text, player);
+        return activechar;
+    },
     
     setActiveChar: async function (playerid, charname) {
         const text = `UPDATE player_data SET active_char = $2 WHERE player_id = $1`;

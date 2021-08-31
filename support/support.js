@@ -104,15 +104,13 @@ module.exports = {
     },
 
     looper: async function (func) {
-        let value = await func();
-        if (value) { return value; }
-        else { await this.looper(func); }
+        let res = false;
+        while (!res) { res = await func(); }
+        return res;
     },
 
-    checkList: function (input, list) {
-        console.log("List Leng: " + list.length)
+    compare: function (input, list) {
         for (let i = 0; i < list.length; i++){
-            console.log("check: " + list[i]);
             if (input.toLowerCase() == list[i].toLowerCase()) {
                 return input;
             }

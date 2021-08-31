@@ -85,21 +85,18 @@ module.exports = {
                                 thisChar.clan = 'none';
 
                                 // UPDATE DATABASE //
-                                let char_id = await db.getCharID(msg.author.id, thisChar.char_name);
-                                if (char_id) {
-                                    if (thisChar.char_name != false) {
-                                        // add new character to database
-                                        await db.addNewChar(thisChar);
+                                if (thisChar.char_name != false) {
+                                   // add new character to database
+                                    await db.addNewChar(thisChar);
 
-                                        // set new character as active character
-                                        let activechar = await db.setActiveChar(msg.author.id, thisChar.char_name);
+                                    // set new character as active character
+                                    let activechar = await db.setActiveChar(msg.author.id, thisChar.char_name);
 
-                                        // update players character list
-                                        await player.updateCharNames(msg.author.id);
+                                    // update players character list
+                                    await player.updateCharNames(msg.author.id);
 
-                                        await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
-                                    }
-                                } 
+                                    await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
+                                }
                             }
                         } else {
                             msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
@@ -107,10 +104,7 @@ module.exports = {
                     } else {
                         msg.channel.send("You failed the simplest of tasks.\nStart over.");
                     }
-
-                   
-
-                               } else if (shortmsg.toLowerCase() === 'no') {
+                } else if (shortmsg.toLowerCase() === 'no') {
                     msg.channel.send("Stop Wasting My Time.");
                 } else {
                     msg.channel.send("That isn\'t an option.");
@@ -126,12 +120,15 @@ module.exports = {
 
    },
 
+/// TEST FUNCTION ///
+
     log: async function(msg) {
         let charac = new character.Type();
         await msg.channel.send("go for it");
-        let stuff = await charac.getRace(msg);
+        let stuff = await charac.getCharName(msg);
         await msg.channel.send("Test: \n" + stuff);
     },
+
 
 // DB HANDLERS //
     // add new player to database
@@ -144,23 +141,30 @@ module.exports = {
         }
     },
 
-    // get player info from databa)e
+    // get player info from database
     getplayer: async function(msg) {
         embedstring = "";
         let playerdat = await player.getPlayerData(msg.author.id);
         
+        // if the player exists
         if (playerdat) {
             embedstring += "```\n";
+            // for pair of player data
             for (let keys in playerdat) {
                 let charstring = "";
+                // if it's the character data
                 if (keys === 'characters') {
                     embedstring += keys + ": ";
+                    // for characters in character data
                     for (let charid in playerdat[keys]) {
+                        //get the character name
                         let charname = await db.charID2Name(playerdat[keys][charid])
                         embedstring += charname.rows[0].char_name + " ";
                     }
                     embedstring += "\n"
                 }
+                // and as long as it's not the player id, or table id
+                // get that info too
                 else if (keys !== 'id' && keys !== 'player_id') {
                     embedstring += keys + ": " + playerdat[keys] + "\n"
                 } 
@@ -180,9 +184,12 @@ module.exports = {
     // delete player from database
     delplayer: async function(msg) {
         let playerdata = await player.getPlayerData(msg.author.id);
+        // if the player exists
         if (playerdata) {
+            // delete em
             let something = await db.delPlayer(msg.author.id)
             playerdata = await player.getPlayerData(msg.author.id);
+            // if he no longer exists lemme know
             if(!playerdata) {
                 msg.channel.send("Player <@" + support.member(msg) + "> deleted.");
             }
@@ -225,11 +232,12 @@ module.exports = {
         if(pd.rows[0]){
             for (let chars in pd.rows){
                 if (pd.rows[chars].char_name === vars){
-                    msg.channel.send("Are you sure?");
+                    msg.channel.send("You are about to delete " + vars + ".\nType `YES` in capital letters to continue.\nWarning: This Is Irreversable.");
                     let response = await support.userprompt(msg);
-                    if (response === 'yes') {
+                    if (response === 'YES') {
                         await db.deleteCharacter(msg.author.id, vars);
                         await player.updateCharNames(msg.author.id);
+                        await player.updateActiveChar(msg.author.id);
                         msg.channel.send("RIP " + vars);
                     }
                 }

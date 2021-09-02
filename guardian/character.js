@@ -46,7 +46,7 @@ module.exports = {
                     }
                 }
             }
-            let result = support.looper(getname);
+            let result = support.looper(false, getname);
             return result;
        }
   
@@ -92,7 +92,7 @@ module.exports = {
                 }
             }
 
-            let result = await support.looper(test);
+            let result = await support.looper(false, test);
             return result;
         }
 

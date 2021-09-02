@@ -110,7 +110,7 @@ module.exports = {
                     }
                 }
                 else if (statdat[header]) {
-                    if(body) {
+                    if(statdat?.[header]?.[body]) {
                         spanner(statdat[header][body], nest);
                         header += " " + body;
                     } else {

@@ -1,8 +1,46 @@
 const enemies = require("../support/json/enemy.json");
+const support = require("../support/support.js");
+const combat = require("./combat.js");
 
-let enemy = {};
 
 module.exports = {
+    // combat loop
+    combat: async function(msg, vars) {
+        let challenger = msg.author.id;
+        let enemy;
+
+        // if combat mentions a member
+        if (msg.mentions.members.first()){
+            e = await msg.mentions.members.first()
+            enemy = await e.toString();
+            await msg.channel.send("<@" + challenger + "> has challenged " + enemy + "!!");
+        } else {
+            let e = await combat.spawn();
+            enemy = e.type;
+        }
+    
+        await msg.channel.send("A " + enemy + " has crossed your path .. \n What will you do?");
+
+        async function combatLoop() {
+            let defending = false;
+            
+            // see if the challenger is attacking
+            if (!defending) {
+                let damage = await combat.attackTurn(msg, challenger, enemy);
+                if (damage) {
+                    await msg.channel.send("You did " + damage + "dmg to " + enemy)
+                }
+            }
+
+        }
+
+        await support.looper(false, combatLoop);
+    },
+
+    test: function(msg, vars) {
+        msg.channel.send("hello <@" + msg.mentions.members.first() + ">")
+    },
+
 
 // attack function
     attack: function(msg, cmd) {
@@ -44,11 +82,4 @@ module.exports = {
             msg.channel.send("Find an enemy before trying to attack!");
         }
     },
-
-// spawn me an enemy 
-    spawn: function(msg) {
-        enemy = enemies[Math.floor(Math.random() * enemies.length)];
-        msg.channel.send("A wild " + enemy.type + " appeared! Gotta Catch Em All!");
-    }
-
 }

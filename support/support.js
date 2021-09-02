@@ -29,6 +29,16 @@ module.exports = {
         return result;
     },
 
+    // awaits a message from a user and makes sure the input is valid
+    combatprompt: async function (msg, writer) {
+        let result = false;
+        await msg.channel.awaitMessages(m => m.author.id === writer, {max: 1, time: 30000})
+            .then(async shortmsg => {
+                result = await shortmsg.first().content;
+            }).catch(() => {});
+        return result;
+    },
+
     reactprompt: async function (msg) {
         let result = await msg.awaitReactions(m => m, {max: 1, time: 30000})
             .then(collected => {
@@ -45,13 +55,12 @@ module.exports = {
     // ROLL THE DIE //
     roll: function(msg, die) {
         if (!die) {
-            die = "2d6";
+            die = "4d6";
         }
         if (die) {
             dieCount = parseInt(die.slice(0, 1), 10);
             dieSides = parseInt(die.slice(2, die.length), 10);
 
-            diestring = "You rolled "
             lowest = dieSides;
             totalroll = 0;
 
@@ -65,15 +74,13 @@ module.exports = {
                 else { diestring = diestring + "and " + roll; }
             }
 
-            msg.channel.send(diestring);
-            msg.channel.send("Roll Total: " + totalroll + "\nTop " + (dieCount - 1) + " Total: " + (totalroll - lowest));
+            return (totalroll - lowest);
         } else {
-        msg.channel.send("Please enter a valid input i.e. `3d8`, `2d6`, `7d4`, etc.");
         }
     },
 
     // create channel for character creation
-    createChannel: function(msg) {
+    charCreateChannel: function(msg) {
         channelName = msg.author.tag + " Character Creation"
         channelID = msg.guild.channels.create(channelName, {
             type: 'text',
@@ -85,6 +92,14 @@ module.exports = {
             },
             { // moderator
                 id: '876288940351553558',
+                allow: ['VIEW_CHANNEL'],
+            },
+            { // guardian
+                id: '879862149097332776',
+                allow: ['VIEW_CHANNEL'],
+            },
+            { // oracle
+                id: '876270934183542825',
                 allow: ['VIEW_CHANNEL'],
             },
             { // user
@@ -103,16 +118,31 @@ module.exports = {
         return [(Math.floor(index % map.width)), (Math.floor(index / map.width))];
     },
 
-    looper: async function (func) {
-        let res = false;
-        while (!res) { res = await func(); }
-        return res;
+    // condition holds the func function in the loop
+    // if condition is false, while the function returns false
+    // loop function until it returns a !false value
+    looper: async function (condition, func) {
+        while (!condition) { condition = await func(); }
+        return condition;
     },
 
-    compare: function (input, list) {
-        for (let i = 0; i < list.length; i++){
-            if (input.toLowerCase() == list[i].toLowerCase()) {
-                return input;
+    // if the input is a string or int compare it to items in the list
+    // otherwise iterate through the input items and look for a math
+    // or return false
+    compare: async function (input, target) {
+        if (typeof input === 'string' || typeof input === int) {
+            for (let i = 0; i < target.length; i++){
+                if (input.toLowerCase() === target[i].toLowerCase()) {
+                    return await input;
+                }
+            }
+        } else {
+            for (let j = 0; j < input.length; input++){
+                for (let i = 0; i < target.length; i++){
+                    if (input[j].toLowerCase() === target[i].toLowerCase()){
+                        return await input[i];
+                    }
+                }
             }
         }
         return false;

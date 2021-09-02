@@ -21,12 +21,15 @@ client.on('message', (msg) => {
                 support.roll(msg, vars)
             }, 2000);
             break;
+        case "test":
+            gameplay.test(msg, vars);
+            break;
+        case "combat":
+            gameplay.combat(msg);
+            break;
         case "kamehameha":
         case "atk":
             gameplay.attack(msg, cmd);
-            break;
-        case "spawn":
-            gameplay.spawn(msg);
             break;
         case "map":
             map.draw(msg);
@@ -40,4 +43,4 @@ client.on('message', (msg) => {
     }
 });
 
-client.login(process.env.GMTOKEN)
+client.login(process.env.GAMEMASTER)

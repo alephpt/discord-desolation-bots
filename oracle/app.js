@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
-const fun = require('./master.js');
+const fun = require('./oracle.js');
 require('dotenv').config();
 
 const client = new Discord.Client();
 
 client.on('ready' , () => {
-    console.log('Master of Worlds: \nLet The Magic Begin!');
+    console.log('The Oracle: \nLet The Magic Begin!');
 });
 
 client.on('message', (msg) => {
@@ -35,4 +35,4 @@ client.on('message', (msg) => {
     }
 });
 
-client.login(process.env.MOWTOKEN)
+client.login(process.env.ORACLE)

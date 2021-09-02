@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const player = require('./player.js');
+const player = require('../support/player.js');
 const character = require('./character.js');
 const chardat = require('../support/json/char.json')
 const support = require('../support/support.js');
@@ -10,7 +10,7 @@ module.exports = {
     create: async function(msg, client) {
         let welcome = "";
 
-        let channelID = support.createChannel(msg);
+        let channelID = support.charCreateChannel(msg);
         let member = support.member(msg);
         member.roles.add(support.roles("birth"));
         

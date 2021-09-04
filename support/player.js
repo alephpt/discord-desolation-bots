@@ -3,7 +3,7 @@ const db = require ('../support/psql/index.js');
 
 module.exports = {
     // returns player json obj from player_data if it exists
-    async getPlayerData (id) {
+    async getPlayerData(id) {
         let playerdata = await db.getPlayer(id);
         if ( playerdata.rows[0]?.player_id === id ) {
             return playerdata.rows[0];

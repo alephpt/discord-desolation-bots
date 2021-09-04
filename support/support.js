@@ -14,9 +14,14 @@ module.exports = {
 
     // returns member object from message author
     member: function (msg) {
-        member = msg.guild.members.cache.find(({user: {username, discriminator}}) =>
+        let member = msg.guild.members.cache.find(({user: {username, discriminator}}) =>
                 `${username}#${discriminator}` === msg.author.tag,)
         return member
+    },
+
+    username: function (msg, usr, dsc) {
+        let username = msg.guild.members.cache.find((u => u.id === id))
+        return username
     },
 
     // awaits a message from a user and returns the content of the message
@@ -32,7 +37,7 @@ module.exports = {
     // awaits a message from a user and makes sure the input is valid
     combatprompt: async function (msg, writer) {
         let result = false;
-        await msg.channel.awaitMessages(m => m.author.id === writer, {max: 1, time: 30000})
+        await msg.channel.awaitMessages(m => m.author.id === writer, {max: 1, time: 1500})
             .then(async shortmsg => {
                 result = await shortmsg.first().content;
             }).catch(() => {});
@@ -70,8 +75,6 @@ module.exports = {
                 if (roll < lowest) { lowest = roll; };
 
                 totalroll += roll;
-                if (i < dieCount - 1 ) { diestring = diestring + roll + ", "; }
-                else { diestring = diestring + "and " + roll; }
             }
 
             return (totalroll - lowest);
@@ -88,19 +91,19 @@ module.exports = {
             permissionOverwrites:[
             { // everyone
                 id: '876270357236023316',
-                deny:['VIEW_CHANNEL'],
+                deny:['VIEW_CHANNEL']
             },
             { // moderator
                 id: '876288940351553558',
-                allow: ['VIEW_CHANNEL'],
+                allow: ['VIEW_CHANNEL']
             },
             { // guardian
                 id: '879862149097332776',
-                allow: ['VIEW_CHANNEL'],
+                allow: ['VIEW_CHANNEL']
             },
             { // oracle
                 id: '876270934183542825',
-                allow: ['VIEW_CHANNEL'],
+                allow: ['VIEW_CHANNEL']
             },
             { // user
                 id: msg.author.id,
@@ -146,5 +149,14 @@ module.exports = {
             }
         }
         return false;
+    },
+
+    // returns current time
+    elapsed: function (time) {
+        if (Date.now() < time + 1500) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

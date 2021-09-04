@@ -22,10 +22,10 @@ client.on('message', (msg) => {
             }, 2000);
             break;
         case "test":
-            gameplay.test(msg, vars);
+            gameplay.test(msg, vars, client);
             break;
         case "combat":
-            gameplay.combat(msg);
+            gameplay.combat(msg, client);
             break;
         case "kamehameha":
         case "atk":

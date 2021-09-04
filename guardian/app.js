@@ -15,15 +15,9 @@ client.on('message', (msg) => {
 
     switch (cmd) {
 // CHARACTER CREATION PROCESS//
-        case "start":
-            gate.create(msg, client);
-            break;
         case "create":
             gate.addchar(msg);
             break;       
-        case "join":
-            gate.join(msg, client);
-            break;
         case "getplayer":
             gate.getplayer(msg);
             break;

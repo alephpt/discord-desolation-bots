@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const fun = require('./oracle.js');
+const oracle = require('./oracle.js');
 require('dotenv').config();
 
 const client = new Discord.Client();
@@ -13,24 +13,30 @@ client.on('message', (msg) => {
 
     switch (cmd) {
 // SERVER RELATED FUNCTIONS //
+        case "start":
+            oracle.start(msg, client);
+            break;
+        case "join":
+            oracle.join(msg, client);
+            break;
         case "msgme":
-            fun.msgme(msg, client);
+            oracle.msgme(msg, client);
             break;
         case "addme":
-            fun.addme(msg, vars);
+            oracle.addme(msg, vars);
             break;
         case "delme":
-            fun.delme(msg, vars);
+            oracle.delme(msg, vars);
             break;
         case "rolecache":
-            fun.rolecache(msg, Discord);
+            oracle.rolecache(msg, Discord);
             break;
         case "cmd":
-            fun.cmd(msg, vars, client);
+            oracle.cmd(msg, vars, client);
             break;
         case "chtab":
         case "ftab":
-            fun.stats(msg, cmd, vars);
+            oracle.stats(msg, cmd, vars);
             break
     }
 });

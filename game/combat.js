@@ -23,14 +23,15 @@ module.exports = {
             
             if (await support.elapsed(ctime)) {
                 console.log(defender)
-                //                let defense = await cs.combatives(msg, defender, defenses)
- //               if (defense) {
+                let defense = await cs.combatives(msg, defender, defenses)
+                if (defense) {
                     return false;
-   //             }
+                }
             }
-            return true;
-        } 
-        return null;
+                return true;
+        } else {
+            return null;
+        }
     },
 
     combatUpdate: async function(msg, attack, attacker, defender, defending) {

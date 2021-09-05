@@ -6,8 +6,8 @@ const cs = require("./cs.js");
 module.exports = {
     // combat loop
     combat: async function(msg, vars, client) {
-        let challenger = msg.author.id;
-        let enemy, enemyName;
+        let defending = false;
+        let enemy, enemyName, enemyID;
 
         // prompt combat status
         if (enemy = msg.mentions.members.first()){
@@ -17,40 +17,51 @@ module.exports = {
             } else {
                 enemyName = enemy.nickname; 
             }
-            console.log(enemy);
-            await msg.channel.send("<@" + challenger + "> has challenged " + pingName + "!!");
+            enemyID = enemy.id;
+            console.log(enemyID);
+            await msg.channel.send("<@" + msg.author.id + "> has challenged " + pingName + "!!");
             setTimeout
         } else {
             let enemy = await combat.spawn();
             enemyName = enemy.type;
+            enemyID = null;
             await msg.channel.send("A " + enemyName + " has crossed your path .. \n What will you do?");
         }
     
 
         async function combatLoop() {
-            let defending = false;
             let time, defense;
             // see if the challenger is attacking or defending
             // if attacking
             if (!defending) {
-                let attack = await combat.sequence(msg, challenger, enemy);
+                attackername = msg.author.tag;
+                attackerid = msg.author.id;
+                enemyname = enemyName;
+                enemyid = enemyID;
+
+                let attack = await combat.sequence(msg, attackerid, enemyid);
                     if (attack === true) {
-                        await msg.channel.send("**" + msg.author.tag + "** just attacked **" + enemyName + "**");
+                        await msg.channel.send("**" + attackername + "** just attacked **" + enemyname + "**");
                         defending = true;
                     } else
                     if (attack === false) {
-                        await msg.channel.send("**" + enemyName + "** just stopped the attack!");
+                        await msg.channel.send("**" + enemyname + "** just stopped the attack!");
                         defending = true;
                     }
             } else
             if (defending) {
-                let attack = await combat.sequence(msg, enemy, challenger);
+                attackername = enemyName;
+                attackerid = enemyID;
+                enemyname = msg.author.tag;
+                enemyid = msg.author.id;
+                
+                let attack = await combat.sequence(msg, attackerid, enemyid);
                 if (attack === true) {
-                    await msg.channel.send("**" + enemyName + "** just attacked **" + msg.author.tag + "**");
+                    await msg.channel.send("**" + attackername + "** just attacked **" + enemyname + "**");
                     defending = false;
                 } else
                 if (attack === false) {
-                    await msg.channel.send("**" + msg.author.id + "** just stopped the attack!");
+                    await msg.channel.send("**" + enemyname + "** just stopped the attack!");
                     defending = false;
                 }
             }

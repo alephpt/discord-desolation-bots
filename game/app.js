@@ -31,6 +31,9 @@ client.on('message', (msg) => {
         case "atk":
             gameplay.attack(msg, cmd);
             break;
+        case "spawn":
+            gameplay.spawn(msg);
+            break;
         case "map":
             map.draw(msg);
             break;

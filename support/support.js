@@ -58,7 +58,7 @@ module.exports = {
     },
 
     // ROLL THE DIE //
-    roll: function(msg, die) {
+    roll: function(die) {
         if (!die) {
             die = "4d6";
         }
@@ -133,17 +133,17 @@ module.exports = {
     // otherwise iterate through the input items and look for a math
     // or return false
     compare: async function (input, target) {
-        if (typeof input === 'string' || typeof input === int) {
+        if (typeof input === 'string' || typeof input === 'int') {
             for (let i = 0; i < target.length; i++){
                 if (input.toLowerCase() === target[i].toLowerCase()) {
-                    return await input;
+                    return await target[i];
                 }
             }
         } else {
             for (let j = 0; j < input.length; input++){
                 for (let i = 0; i < target.length; i++){
                     if (input[j].toLowerCase() === target[i].toLowerCase()){
-                        return await input[i];
+                        return await target[i];
                     }
                 }
             }

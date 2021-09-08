@@ -3,9 +3,13 @@ const support = require("../support/support.js");
 const combat = require("./combat.js");
 const cs = require("./cs.js");
 
+let enemy = {};
+
 module.exports = {
     // combat loop
     combat: async function(msg, vars, client) {
+        let challenger = msg.author.id;
+        let challengerName = cs.memberName(msg);
         let defending = false;
         let enemy, enemyName, enemyID;
 
@@ -93,13 +97,19 @@ module.exports = {
         */
     },
 
+// spawn 
+    spawn: async function(msg) {
+        enemy = await combat.spawn();
+        msg.channel.send("A wild " + enemy.type + " appeared! Gotta Catch Em All!");
+    },
 
 // attack function
     attack: function(msg, cmd) {
         let atkdmg = 150;
         if (cmd == 'kamehameha') {
             atkdmg = 2000;
-        }
+        } 
+        
 
         // if there is an enemy
         if (enemy.type) {

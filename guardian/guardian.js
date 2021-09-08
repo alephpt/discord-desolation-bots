@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const player = require('../support/player.js');
-const character = require('./character.js');
+const character = require('../support/character.js');
 const chardat = require('../support/json/char.json')
 const support = require('../support/support.js');
 const db = require('../support/psql/index.js');
@@ -39,17 +39,19 @@ module.exports = {
                         if (thisChar.sex) {
                             thisChar.race = await thisChar.getRace(msg);
                             
-                            // populate beginner attributes
+                            // get character focus
                             if(thisChar.race) {
-                                thisChar.level = 1;
+                                thisChar.focus = await thisChar.getFocus(msg);
+
+                                if(thisChar.focus) {
+                                    thisChar.stats = await thisChar.getStats(msg, thisChar.race.toLowerCase());
+
+                                
                                 thisChar.world = "starter";
                                 thisChar.loc = support.locIndex(20, 20);
-                                thisChar.discipline = 'none';
-                                thisChar.mastery = 'locked';
-                                thisChar.alignment = 'neutral';
                                 thisChar.group_name = 'none';
-                                thisChar.quest_current = ['Genesis'];
-                                thisChar.clan = 'none';
+                                thisChar.quest_current = 'Genesis';
+                                thisChar.clan = thisChar.race;
 
                                 // UPDATE DATABASE //
                                 if (thisChar.char_name != false) {
@@ -64,6 +66,7 @@ module.exports = {
 
                                     await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
                                 }
+                                }
                             }
                         } else {
                             msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
@@ -74,7 +77,7 @@ module.exports = {
                 } else if (shortmsg.toLowerCase() === 'no') {
                     msg.channel.send("Stop Wasting My Time.");
                 } else {
-                    msg.channel.send("That isn\'t an option.");
+                    msg.channel.send("That isn\'t an option. Start over.");
                 }
             } else {
                 msg.channel.send("You have too many characters.");
@@ -83,7 +86,9 @@ module.exports = {
             }
         } else {
             msg.channel.send("Why are you here?!");
+        
         }
+
 
    },
 
@@ -92,8 +97,9 @@ module.exports = {
     log: async function(msg) {
         let charac = new character.Type();
         await msg.channel.send("go for it");
-        let stuff = await charac.getCharName(msg);
-        await msg.channel.send("Test: \n" + stuff);
+        let race = await charac.getRace(msg);
+        let stuff = await charac.getStats(msg, race)
+        await msg.channel.send("Test: \n" + JSON.stringify(stuff));
     },
 
 

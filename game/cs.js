@@ -18,6 +18,20 @@ module.exports = {
         return combat;
     },
 
+     memberName: async function (target) {
+        let nickname;
+        
+        if (target?.author?.id){
+            target = await support.member(target)
+        }
+
+        if (target.nickname === null) {
+            nickname = target.user.username
+        } else {
+            nickename = target.nickname
+        }
+    }
+
 }
 
 

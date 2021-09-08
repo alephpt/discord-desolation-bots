@@ -1,7 +1,15 @@
-const db = require ('../support/psql/index.js');
+const db = require ('./psql/index.js');
 
 
 module.exports = {
+    Type : class {
+        constructor (player_id, active_char,) {
+            this.player_id = player_id;
+            this.active_char = active_char;
+
+        }
+    },
+
     // returns player json obj from player_data if it exists
     async getPlayerData(id) {
         let playerdata = await db.getPlayer(id);

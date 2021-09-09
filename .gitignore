@@ -4,3 +4,4 @@
 .bup
 */.bup
 node_modules
+.vscode

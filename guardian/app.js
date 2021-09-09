@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
-const gate = require('./gatekeeper.js');
+const gate = require('./guardian.js');
 require('dotenv').config();
 
 const client = new Discord.Client();
 
 client.on('ready' , () => {
-    console.log('Gate Keeper: \nNone Shall Pass!');
+    console.log('Guardian: \nNone Shall Pass!');
 });
 
 client.on('message', (msg) => {
@@ -15,15 +15,9 @@ client.on('message', (msg) => {
 
     switch (cmd) {
 // CHARACTER CREATION PROCESS//
-        case "start":
-            gate.create(msg, client);
-            break;
         case "create":
             gate.addchar(msg);
             break;       
-        case "join":
-            gate.join(msg, client);
-            break;
         case "getplayer":
             gate.getplayer(msg);
             break;
@@ -45,4 +39,4 @@ client.on('message', (msg) => {
     }
 });
 
-client.login(process.env.GKTOKEN)
+client.login(process.env.GUARDIAN)

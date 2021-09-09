@@ -1,52 +1,19 @@
 const Discord = require('discord.js');
-const player = require('./player.js');
-const character = require('./character.js');
+const player = require('../support/player.js');
+const character = require('../support/character.js');
 const chardat = require('../support/json/char.json')
 const support = require('../support/support.js');
 const db = require('../support/psql/index.js');
 
 module.exports = {
-// CREATE CHARACTER DATA //
-    create: async function(msg, client) {
-        let welcome = "";
 
-        let channelID = support.createChannel(msg);
-        let member = support.member(msg);
-        member.roles.add(support.roles("birth"));
-        
-        if (!(await player.getPlayerData(msg.author.id))) {
-            await player.addPlayerData(msg.author.id);
-            welcome = "<@" + msg.author.id + ">, Welcome to the World of Desolation!\n"; 
-        }
-
-        channelID.then(function(result) {
-            client.channels.cache.get(result.id).send(welcome + "Type `.create` to create your player.");
-        })
-    },
-
-// FINISH CREATION //
-    // deletes character creation channel
-    join: function(msg, client) {
-        member = support.member(msg);
-        chan = client.channels.cache.get(msg.channel.id);
-        // checks if channel has the appropriate role and user privileges set
-        if (chan.permissionOverwrites.get(msg.author.id)){
-            member.roles.add(support.roles("alive"));
-            member.roles.remove(support.roles("birth"));
-
-            client.channels.cache.get('876317525971980368').send("Welcome <@" + msg.author.id + "> to The World of Desolation");
-            chan.delete();
-        }
-
-    },
-
-// TESTIES //)
+// START CHARACTER CREATION //
     addchar: async function (msg) {
         let player_data = await player.getPlayerData(msg.author.id);
         if (player_data) {
             let char_count = await player.getCharCount(msg.author.id);
             if (char_count < 3) {
-                // start character creation
+                // prompt the user
                 await msg.channel.send("Are you ready?");
                 let shortmsg = await support.userprompt(msg);
 
@@ -72,17 +39,19 @@ module.exports = {
                         if (thisChar.sex) {
                             thisChar.race = await thisChar.getRace(msg);
                             
-                            // populate beginner attributes
+                            // get character focus
                             if(thisChar.race) {
-                                thisChar.level = 1;
+                                thisChar.focus = await thisChar.getFocus(msg);
+
+                                if(thisChar.focus) {
+                                    thisChar.stats = await thisChar.getStats(msg, thisChar.race.toLowerCase());
+
+                                
                                 thisChar.world = "starter";
                                 thisChar.loc = support.locIndex(20, 20);
-                                thisChar.discipline = 'none';
-                                thisChar.mastery = 'locked';
-                                thisChar.alignment = 'neutral';
                                 thisChar.group_name = 'none';
-                                thisChar.quest_current = ['Genesis'];
-                                thisChar.clan = 'none';
+                                thisChar.quest_current = 'Genesis';
+                                thisChar.clan = thisChar.race;
 
                                 // UPDATE DATABASE //
                                 if (thisChar.char_name != false) {
@@ -97,6 +66,7 @@ module.exports = {
 
                                     await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
                                 }
+                                }
                             }
                         } else {
                             msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
@@ -107,7 +77,7 @@ module.exports = {
                 } else if (shortmsg.toLowerCase() === 'no') {
                     msg.channel.send("Stop Wasting My Time.");
                 } else {
-                    msg.channel.send("That isn\'t an option.");
+                    msg.channel.send("That isn\'t an option. Start over.");
                 }
             } else {
                 msg.channel.send("You have too many characters.");
@@ -116,7 +86,9 @@ module.exports = {
             }
         } else {
             msg.channel.send("Why are you here?!");
+        
         }
+
 
    },
 
@@ -125,8 +97,9 @@ module.exports = {
     log: async function(msg) {
         let charac = new character.Type();
         await msg.channel.send("go for it");
-        let stuff = await charac.getCharName(msg);
-        await msg.channel.send("Test: \n" + stuff);
+        let race = await charac.getRace(msg);
+        let stuff = await charac.getStats(msg, race)
+        await msg.channel.send("Test: \n" + JSON.stringify(stuff));
     },
 
 
@@ -232,7 +205,7 @@ module.exports = {
         if(pd.rows[0]){
             for (let chars in pd.rows){
                 if (pd.rows[chars].char_name === vars){
-                    msg.channel.send("You are about to delete " + vars + ".\nType `YES` in capital letters to continue.\nWarning: This Is Irreversable.");
+                    await msg.channel.send("You are about to delete " + vars + ".\nType `YES` in capital letters to continue.\nWarning: This Is Irreversable.");
                     let response = await support.userprompt(msg);
                     if (response === 'YES') {
                         await db.deleteCharacter(msg.author.id, vars);
@@ -243,7 +216,7 @@ module.exports = {
                 }
             }
         } else {
-            msg.channel.send("I don't know who you're talking about.")
+            await msg.channel.send("I don't know who you're talking about.")
         }
         
     }

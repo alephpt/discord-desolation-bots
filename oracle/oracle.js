@@ -1,6 +1,7 @@
 
 const Discord = require('discord.js');
 const support = require('../support/support.js');
+const player = require('../support/player.js');
 const chardata = require('../support/json/char.json');
 const focus = require('../support/json/focus.json');
 
@@ -23,6 +24,41 @@ function spanner(chardat, nest) {
 
 
 module.exports = {
+
+// START CHARACTER CREATION //
+    // creates creation channel and player object in db
+    start: async function(msg, client) {
+        let welcome = "";
+
+        let channelID = support.charCreateChannel(msg);
+        let member = support.member(msg);
+        member.roles.add(support.roles("birth"));
+
+        if (!(await player.getPlayerData(msg.author.id))) {
+            await player.addPlayerData(msg.author.id);
+            welcome = "<@" + msg.author.id + ">, Welcome to the World of Desolation!\n";
+        }
+
+        channelID.then(function(result) {
+            client.channels.cache.get(result.id).send(welcome + "Type `.create` to create your player.");
+        })
+    },
+
+// FINISH CREATION //
+    // deletes character creation channel
+    join: function(msg, client) {
+        member = support.member(msg);
+        chan = client.channels.cache.get(msg.channel.id);
+        // checks if channel has the appropriate role and user privileges set
+        if (chan.permissionOverwrites.get(msg.author.id)){
+            member.roles.add(support.roles("alive"));
+            member.roles.remove(support.roles("birth"));
+
+            client.channels.cache.get('876317525971980368').send("Welcome <@" + msg.author.id + "> to The World of Desolation");
+            chan.delete();
+        }
+
+    },
 
 // OUTPUT ROLE DATA //
     rolecache: function(msg) {
@@ -110,7 +146,7 @@ module.exports = {
                     }
                 }
                 else if (statdat[header]) {
-                    if(body) {
+                    if(statdat?.[header]?.[body]) {
                         spanner(statdat[header][body], nest);
                         header += " " + body;
                     } else {

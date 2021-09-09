@@ -125,7 +125,14 @@ module.exports = {
     // if condition is false, while the function returns false
     // loop function until it returns a !false value
     looper: async function (condition, func) {
-        while (!condition) { condition = await func(); }
+        let count = 5;
+        let time = Date.now();
+        let timeout = time + 10000;
+        while (!condition && count > 0 && time < timeout) { 
+            condition = await func(); 
+            count = count - 1;
+            time = Date.now();
+        };
         return condition;
     },
 

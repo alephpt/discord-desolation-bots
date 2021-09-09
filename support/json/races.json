@@ -1,18 +1,8 @@
 {
-    "alkonost" : {
+    "Alkonost" : {
         "description" : "Alkonost is a half humanoid half bird creature that has the ability to fly and gain an advantage over their opponent.",                
-        "Racial_abilities" : {
-            "alignment_modifier" : {
-                "valiant" : "1",
-                "hostile" : "2",
-                "savage" : "1"
-            },
-            "focus_modifier" : {
-                "melee" : "1",
-                "ranged" : "1",
-                "magic" : "1"
-            },
-            "Flight" : {
+        "racial_abilities" : {
+           "Flight" : {
                 "description" : "Flight allows for faster travel and immunity to melee", 
                 "stats" : {
                     "level" : "1",
@@ -46,22 +36,22 @@
             "DEXTERITY" : "3",
             "STAMINA" : "3",
             "INTELLIGENCE" : "4"
-        }        
+        },
+        "alignment_modifier" : {
+            "valiant" : "1",
+            "hostile" : "2",
+            "savage" : "1"
+        },
+        "focus_modifier" : {
+            "melee" : "1",
+            "ranged" : "1",
+            "magic" : "1"
+        } 
     },
-    "dwarve" : {
+    "Dwarve" : {
         "description" : "Dwarves are masters of weapons and battle, weilding all weapons with natural talent percision.",
         "racial_abilities" : {
-            "alignment_modifier" : {
-                "noble" : "1",
-                "valiant" : "2",
-                "hostile" : "1"
-            },
-            "focus_modifier" : {
-                "melee" : "2",
-                "ranged" : "1",
-                "magic" : "0"
-            },
-            "natural strength" : "3"
+           "natural strength" : "3"
         },
         "stats_level" : {
             "MAX_HEALTH" : "140",
@@ -78,21 +68,21 @@
             "DEXTERITY" : "2",
             "STAMINA" : "3",
             "INTELLIGENCE" : "2"
+        },
+        "alignment_modifier" : {
+            "noble" : "1",
+            "valiant" : "2",
+            "hostile" : "1"
+        },
+        "focus_modifier" : {
+            "melee" : "2",
+            "ranged" : "1",
+            "magic" : "0"
         }
     },
-    "wood elf" : {
+    "Wood Elf" : {
         "description" : "Wood Elves are very smart and intuitive, while also being very charismatic and mysterious.",
         "racial_abilities" : {
-            "alignment_modifier" : {
-                "purest" : "1",
-                "noble" : "2",
-                "valiant" : "1"
-            },
-            "focus_modifier" : {
-                "melee" : "-1",
-                "ranged" : "2",
-                "magic" : "2"
-            },
             "natures_focus" : "+3 int",
             "dark_vision" : "+60 sight",
             "deception" : "+3 evade "
@@ -112,21 +102,21 @@
             "DEXTERITY" : "3",
             "STAMINA" : "3",
             "INTELLIGENCE" : "3"
-        }          
+        },
+        "alignment_modifier" : {
+            "purest" : "1",
+            "noble" : "2",
+            "valiant" : "1"
+        },
+        "focus_modifier" : {
+            "melee" : "-1",
+            "ranged" : "2",
+            "magic" : "2"
+        }
     },
-    "dark elf" : {
-        "description" : "Dark Elves are largely deceptiove and mysterious, with a passion for the dark arts.",           
+    "Dark Elf" : {
+        "description" : "Dark Elves are largely deceptive, mysterious and secretive, with a passionate affinity for the dark arts.",           
         "racial_abilities" : {
-            "alignment_modifier" : {
-                "purest" : "savage",
-                "noble" : "wicked",
-                "valiant" : "vile"
-            },
-            "focus_modifier" : {
-                "melee" : "1",
-                "ranged" : "0",
-                "magic" : "2"
-            },
             "natures_deception" : "+3 sta",
             "dark_vision" : "+60 sight",
             "psychic_trance" : "-3 enemy modifier "
@@ -146,24 +136,28 @@
             "DEXTERITY" : "2",
             "STAMINA" : "2",
             "INTELLIGENCE" : "4"
-        }          
+        },
+        "alignment_modifier" : {
+            "savage" : "1",
+            "wicked" : "2",
+            "vile" : "1"
+        },
+        "focus_modifier" : {
+            "melee" : "1",
+            "ranged" : "0",
+            "magic" : "2"
+        }
     },
-    "human" : {
-        "description" : "the plains folk were nomads, hunters, gatherers, and builders before the grat war.. now they sre warriors fighting for their lives.",                      
-        "Racial_abilities" : 
-        {
-            "alignment_modifier" : {
-                "valiant" : "1",
-                "hostile" : "2",
-                "savage" : "1"
-            },
+    "Human" : {
+        "description" : "The plains folk were Nomads, Hunters, Gatherers, and Builders before The Great War.. now they are warriors fighting for their lives and honor.",                      
+        "racial_abilities" : {
             "natural instinct" : {
                 "strength" : "1",
                 "dexterity" : "1",
                 "stamina" : "1",
                 "inteligence" : "1"
             }
-        },
+       },
         "stats_level" : {
             "MAX_HEALTH" : "120",
             "MAX_ENERGY" : "120",
@@ -179,21 +173,23 @@
             "DEXTERITY" : "3",
             "STAMINA" : "4",
             "INTELLIGENCE" : "3"
-        }
-    },
-    "lycan" : {
-        "description" : "What started as a disease brought out by the moonlight, over generations the humanity was bred out of this wolf like species.",
+        },
         "alignment_modifier" : {
-            "noble" : "1",
-            "valiant" : "2",
-            "hostile" : "1"
+            "valiant" : "1",
+            "hostile" : "2",
+            "savage" : "1"
         },
         "focus_modifier" : {
-            "melee" : "2",
-            "ranged" : "-1",
-            "magic" : "2"
-        },
-        "Racial Abilities" : {
+            "melee" : "1",
+            "ranged" : "1",
+            "magic" : "1"
+        }
+
+
+    },
+    "Lycan" : {
+        "description" : "It first started as a disease brought out by the moonlight, but over generations the humanity has slowly been bred out of this wolf like species.",
+       "racial_abilities" : {
             "Heart of the Beast" : {
                 "MAX_HEALTH" : "4",
                 "MAX_ENERGY" : "4",
@@ -222,10 +218,44 @@
             "DEXTERITY" : "4",
             "STAMINA" : "3",
             "INTELLIGENCE" : "2"
-        }
+        },
+        "alignment_modifier" : {
+            "hostile" : "1",
+            "savage" : "2",
+            "wicked" : "1"
+        },
+        "focus_modifier" : {
+            "melee" : "2",
+            "ranged" : "-1",
+            "magic" : "2"
+        } 
     },
-    "half-blood" : {
-        "description" : "Half blood is a combination of any 2 of the other races."
+    "Half-Blood" : {
+        "description" : "",           
+        "racial_abilities" : {},
+        "stats_level" : {
+            "MAX_HEALTH" : "",
+            "MAX_ENERGY" : "",
+            "STRENGTH" : "",
+            "DEXTERITY" : "",
+            "STAMINA" : "",
+            "INTELLIGENCE" : ""
+        },
+        "stats_modifier" : {
+            "MAX_HEALTH" : "",
+            "MAX_ENERGY" : "",
+            "STRENGTH" : "",
+            "DEXTERITY" : "",
+            "STAMINA" : "",
+            "INTELLIGENCE" : ""
+        },
+        "alignment_modifier" : {
+        },
+        "focus_modifier" : {
+            "melee" : "",
+            "ranged" : "",
+            "magic" : ""
+        }
     }
 }
 

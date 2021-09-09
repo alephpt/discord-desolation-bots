@@ -45,7 +45,8 @@ module.exports = {
 
                                 if(thisChar.focus) {
                                     thisChar.stats = await thisChar.getStats(msg, thisChar.race.toLowerCase());
-
+                                    
+                        
                                 
                                 thisChar.world = "starter";
                                 thisChar.loc = support.locIndex(20, 20);
@@ -96,10 +97,59 @@ module.exports = {
 
     log: async function(msg) {
         let charac = new character.Type();
-        await msg.channel.send("go for it");
-        let race = await charac.getRace(msg);
-        let stuff = await charac.getStats(msg, race)
-        await msg.channel.send("Test: \n" + JSON.stringify(stuff));
+        let random = Math.floor((Math.random() * 100) / 2);
+        let race1, race2, genetics1, genetics2, genetics3;
+
+        if (random < 22) {
+            await msg.channel.send("Give me your races you mutt!");
+        } else {
+            await msg.channel.send("Choose your breed.");
+        }
+        let racial = await support.userprompt(msg);
+        let racist = [];
+
+        if (racial) {
+            let discrimination = racial.split(" ");
+            if (discrimination[0]?.toLowerCase() === 'wood' || discrimination[0]?.toLowerCase() === 'dark'){
+                genetics1 = discrimination[0] + " " + discrimination[1];
+            }
+            if (discrimination[1]?.toLowerCase() === 'wood' || discrimination[1]?.toLowerCase() === 'dark'){
+                genetics2 = discrimination[1] + " " + discrimination[2];
+            }
+            if (discrimination[2]?.toLowerCase() === 'wood' || discrimination[2]?.toLowerCase() === 'dark'){
+                genetics3 = discrimination[2] + " " + discrimination[3];
+            }
+                
+            if (genetics1) {
+                race1 = await support.compare(genetics1, chardat.info.race);
+                if (genetics3) {
+                    race2 = await support.compare(genetics3, chardat.info.race);
+                } else {
+                    race2 = await support.compare(discrimination[2], chardat.info.race);
+                }
+            } else {
+                race1 = await support.compare(discrimination[0], chardat.info.race);
+                if (genetics2) {
+                    race2 = await support.compare(genetics2, chardat.info.race);
+                } else {
+                    race2 = await support.compare(discrimination[1], chardat.info.race);
+                }
+            }
+        } else {
+            "too slow";
+        }
+
+//        let race = await charac.getRace(msg);
+//        let stuff = await charac.getStats(msg, race)
+//        let stuff = await charac.getAlign(msg, race)
+        if (race1 && race2) {
+            console.log(race1)
+            console.log(race2)
+            let stuff = await character.halfblood(race1, race2)
+            await msg.channel.send("Test: \n" + JSON.stringify(stuff));
+        } else {
+            msg.channel.send("Invalid choices man. Try again.")
+        }
     },
 
 
@@ -116,7 +166,7 @@ module.exports = {
 
     // get player info from database
     getplayer: async function(msg) {
-        embedstring = "";
+        let embedstring = "";
         let playerdat = await player.getPlayerData(msg.author.id);
         
         // if the player exists
@@ -175,7 +225,7 @@ module.exports = {
     // get character info
     getchar: async function(msg) {
         let pd = await db.getCharacters(msg.author.id);
-        embedstring = "";
+        let embedstring = "";
         
         if (pd.rows[0]) {
             for (let chars in pd.rows){

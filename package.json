@@ -1,13 +1,16 @@
 {
   "dependencies": {
     "discord.js": "^13.1.0",
+    "eslint": "^7.32.0",
     "pg": "^8.7.1"
   },
   "name": "alephpt-discord-bot",
   "version": "1.0.0",
   "main": ".eslintrc.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "errors": "eslint . --quiet",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",

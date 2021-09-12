@@ -42,10 +42,13 @@ module.exports = {
                             // get character focus
                             if(thisChar.race) {
                                 thisChar.focus = await thisChar.getFocus(msg);
-
+                                
+                                // get character stats
                                 if(thisChar.focus) {
-                                    thisChar.stats = await thisChar.getStats(msg, thisChar.race.toLowerCase());
-                                    
+                                    thisChar.stats = await thisChar.getStats(msg, thisChar.race);
+                                    if (thisChar.race[0] === `Half-Blood`){
+                                        thisChar.race = thisChar.race[0][0] + "-" + thisChar.race[0][1];
+                                    }
                         
                                 
                                 thisChar.world = "starter";

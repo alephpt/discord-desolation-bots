@@ -2,119 +2,8 @@ const support = require('./support.js');
 const stats = require('./stats.js');
 const character = require('./json/char.json');
 const races = require('./json/races.json');
+const cs = require('./cs.js');
 
-// put to races together
-async function halfblood(race1, race2) {
-    // get first and second race data and grab empty half-blood object
-    let f_race = await races[race1];
-    let s_race = await races[race2];
-    let half_blood = await races["Half-Blood"];
-
-    // iterate through each section of the half-blood object
-    Object.keys(half_blood).forEach((key) => {
-        // if it's the description, concatonate and modify
-        if (key === "description") {
-            half_blood.description = f_race.description + " " + s_race.description + "This is what happens when the two meet.";
-        } else 
-        // if it's racial abilities, pick random abilities from each race randomly 
-        if (key === "racial_abilities") {
-            half_blood.racial_abilities = {};
-            let key, value; // blank object
-            let itsNew = true;
-
-            // lengths for each races abilities and sum of both
-            fRaceLength = Object.keys(f_race.racial_abilities).length;
-            sRaceLength = Object.keys(s_race.racial_abilities).length;
-            abilityLength = Math.floor((fRaceLength + sRaceLength) / 2);
-            
-            // for each ability
-            for (let abilityCount = 0; abilityCount < abilityLength; abilityCount++) {  
-                // choose random numbers
-                let ability = Math.floor(Math.random() * abilityLength + 1);
-                let racist = Math.floor(Math.random() * 100 + 1);
-                
-                // grab the ability within the length of the random races ability list
-                if (racist % 2 === 0) {
-                    key = Object.keys(f_race.racial_abilities)[ability % fRaceLength];
-                    value = f_race.racial_abilities[key];
-                } else {
-                    key = Object.keys(s_race.racial_abilities)[ability % sRaceLength];
-                    value = s_race.racial_abilities[key];
-                }
-                
-                // make sure the ability already hasn't been chosen, and decrease abilityCount if so
-                for (let newAbilities = 0; newAbilities < abilityCount; newAbilities++){
-                    if (Object.keys(half_blood.racial_abilities)[newAbilities] !== key) {
-                        itsNew = true;
-                    } else {
-                        abilityCount--;
-                    }
-                }
-
-                if(itsNew){
-                    half_blood.racial_abilities[key] = value;
-                    itsNew = false;
-                }
-            }
-        } else
-        // combine stats
-        if (key === "stats_level") {
-            Object.keys(half_blood.stats_level).forEach((stat) => {
-                half_blood.stats_level[stat] = Math.round((Number(f_race.stats_level[stat]) + Number(s_race.stats_level[stat])) / 2).toString();
-            })
-        } else
-        if (key === "stats_modifier") {
-            Object.keys(half_blood.stats_modifier).forEach((stat) => {
-                half_blood.stats_modifier[stat] = Math.round((Number(f_race.stats_modifier[stat]) + Number(s_race.stats_modifier[stat])) / 2).toString();
-            })
-        } else
-        // randomly pick which race is dominant and pull alignment points from both
-        if (key === "alignment_modifier") {
-            half_blood.alignment_modifier = {};
-            let randomNum = Math.floor(Math.random() * 100 + 1);
-
-            if (randomNum < 50) {
-                firstAlign =  f_race.alignment_modifier;
-                segundaAlign = s_race.alignment_modifier;
-            } else {
-                firstAlign =  s_race.alignment_modifier;
-                segundaAlign = f_race.alignment_modifier;
-            }
-
-            // for each alignment group
-            Object.keys(firstAlign).forEach((align1) => {
-                let match = false;
-                Object.keys(segundaAlign).forEach((align2) => {
-                    // if the alignments are a match then pull the sum, or else cut them in half and floor
-                    if (align2 === align1) {
-                        half_blood.alignment_modifier[align1] = Math.round((Number(firstAlign[align1]) + Number(segundaAlign[align2])) / 2).toString();
-                        match = true;
-                    } else { 
-                        let determinant = Math.floor(Number(segundaAlign[align2]) / 2);
-                        if (determinant > 0) {
-                            half_blood.alignment_modifier[align2] = determinant.toString();
-                        }
-                    }
-                })
-                // primary race gets + 1 / 2 and floored (basically they 1 point from the first set nomatter what
-                if (!match) {
-                    let determinant = Math.floor((Number(firstAlign[align1]) + 1) / 2);
-                    if (determinant > 0) {
-                        half_blood.alignment_modifier[align1] = determinant.toString();
-                    }
-                }
-            })       
-        } else
-        if (key === "focus_modifier") {
-            Object.keys(half_blood.focus_modifier).forEach((focus) => {
-                half_blood.focus_modifier[focus] = Math.round((Number(f_race.focus_modifier[focus]) + Number(s_race.focus_modifier[focus])) / 2).toString();
-            })
-        }
-
-    })
-
-    return half_blood;
-}
 
 module.exports = {
     Type : class {
@@ -197,7 +86,14 @@ module.exports = {
                 await msg.channel.send("```" + racestring + "``` Which are you?");
                 let response = await support.userprompt(msg);
                 let race = await support.compare(response, character.info.race);
-                if (race) { return race; } 
+                if (race) { 
+                    if ( race != 'Half-Blood' ) {
+                        return race; 
+                    } else {
+                        let hybrid = await cs.getBreeds(msg);
+                        return [race, hybrid];
+                    }
+                }
                 else { 
                     msg.channel.send("That's not right. Try again."); 
                     return false;
@@ -236,6 +132,7 @@ module.exports = {
 
         // get players stats of choice
         async getStats(msg, race) {
+            let racedata;
             await msg.channel.send("We have to figure out your stats. \nWould you like to proceed with defaults, or play by chance?\nType `YES` for defaults or `ROLL` to test your luck.");
 
             let choice = await support.userprompt(msg);
@@ -246,9 +143,14 @@ module.exports = {
             }
 
             let stat = new stats.Type();
-            if (race.toLowerCase() != "half-blood"){
-                let racedata = races[race];
+            if (race[0] !== "Half-Blood"){
+                racedata = races[race];
+            } else
+            if (race[0] === "Half-blood"){
+                racedata = cs.halfBlood(race[0][0], race[0][1]);
+            }
 
+            if (racedata) {
                 // if the player chooses to chance it
                 if (choice.toLowerCase() === "roll"){
                     // populate list of options 
@@ -355,4 +257,3 @@ module.exports = {
     }
 }
 
-module.exports.halfblood = halfblood;

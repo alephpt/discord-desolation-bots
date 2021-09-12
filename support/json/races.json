@@ -61,7 +61,7 @@
             "STAMINA" : "11",
             "INTELLIGENCE" : "8"
         },
-        "stat_multiplier" : {
+        "stats_modifier" : {
             "MAX_HEALTH" : "5",
             "MAX_ENERGY" : "4",
             "STRENGTH" : "4",

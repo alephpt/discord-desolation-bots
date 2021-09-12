@@ -128,28 +128,41 @@ async function getBreeds(msg){
 
     if (racial) {
         let discrimination = racial.split(" ");
+        // if the first word is wood/dark then concat the first and second words into a variable
         if (discrimination[0]?.toLowerCase() === 'wood' || discrimination[0]?.toLowerCase() === 'dark'){
             genetics1 = discrimination[0] + " " + discrimination[1];
         }
+        // if the second word is wood/dark then concat the second and third into genetics 2
         if (discrimination[1]?.toLowerCase() === 'wood' || discrimination[1]?.toLowerCase() === 'dark'){
             genetics2 = discrimination[1] + " " + discrimination[2];
         }
+        // if the third word is wood/dark then concat third and fourth into genetics 3
         if (discrimination[2]?.toLowerCase() === 'wood' || discrimination[2]?.toLowerCase() === 'dark'){
             genetics3 = discrimination[2] + " " + discrimination[3];
         }
         
+        // if the first two words are concatonated
         if (genetics1) {
+            // if it's in the list of races, store it in race1
             race1 = await support.compare(genetics1, character.info.race);
+            // if the second two words are concatonated
             if (genetics3) {
+                // if they are in the in list of races, store in race1
                 race2 = await support.compare(genetics3, character.info.race);
             } else {
+                // else check that the 3rd word is in the list
                 race2 = await support.compare(discrimination[2], character.info.race);
             }
+        // and if the first word is a single word
         } else {
+            // see if it's in the list of races
             race1 = await support.compare(discrimination[0], character.info.race);
+            // if the second two words are concatonated
             if (genetics2) {
+                // see if it's valid and store in race 2
                 race2 = await support.compare(genetics2, character.info.race);
             } else {
+                // else check the second word
                 race2 = await support.compare(discrimination[1], character.info.race);
             }
         }
@@ -157,6 +170,7 @@ async function getBreeds(msg){
         "too slow";
     }
 
+    // if race 1 and race 2 are valid and not the same
     if (race1 && race2 && race1 != race2) {
         return [race1, race2];
     } else {

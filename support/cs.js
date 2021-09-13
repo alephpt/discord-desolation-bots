@@ -141,7 +141,7 @@ async function getBreeds(msg){
             genetics3 = discrimination[2] + " " + discrimination[3];
         }
         
-        // if the first two words are concatonated
+        // if the first two words are concatenated
         if (genetics1) {
             // if it's in the list of races, store it in race1
             race1 = await support.compare(genetics1, character.info.race);
@@ -157,7 +157,7 @@ async function getBreeds(msg){
         } else {
             // see if it's in the list of races
             race1 = await support.compare(discrimination[0], character.info.race);
-            // if the second two words are concatonated
+            // if the second two words are concatenated
             if (genetics2) {
                 // see if it's valid and store in race 2
                 race2 = await support.compare(genetics2, character.info.race);

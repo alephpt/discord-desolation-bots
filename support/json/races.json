@@ -22,20 +22,20 @@
             }
         },
         "stats_level" : {
-            "MAX_HEALTH" : "120",
-            "MAX_ENERGY" : "120",
-            "STRENGTH" : "12",
-            "DEXTERITY" : "12",
-            "STAMINA" : "14",
-            "INTELLIGENCE" : "10"
+            "m_hp" : "120",
+            "m_ep" : "120",
+            "str" : "12",
+            "dex" : "12",
+            "sta" : "14",
+            "intel" : "10"
         },
         "stats_modifier" : {
-            "MAX_HEALTH" : "4",
-            "MAX_ENERGY" : "2",
-            "STRENGTH" : "4",
-            "DEXTERITY" : "3",
-            "STAMINA" : "3",
-            "INTELLIGENCE" : "4"
+            "m_hp" : "4",
+            "m_ep" : "2",
+            "str" : "4",
+            "dex" : "3",
+            "sta" : "3",
+            "intel" : "4"
         },
         "alignment_modifier" : {
             "valiant" : "1",
@@ -54,20 +54,20 @@
            "natural strength" : "3"
         },
         "stats_level" : {
-            "MAX_HEALTH" : "140",
-            "MAX_ENERGY" : "120",
-            "STRENGTH" : "12",
-            "DEXTERITY" : "13",
-            "STAMINA" : "11",
-            "INTELLIGENCE" : "8"
+            "m_hp" : "140",
+            "m_ep" : "120",
+            "str" : "12",
+            "dex" : "13",
+            "sta" : "11",
+            "intel" : "8"
         },
         "stats_modifier" : {
-            "MAX_HEALTH" : "5",
-            "MAX_ENERGY" : "4",
-            "STRENGTH" : "4",
-            "DEXTERITY" : "2",
-            "STAMINA" : "3",
-            "INTELLIGENCE" : "2"
+            "m_hp" : "5",
+            "m_ep" : "4",
+            "str" : "4",
+            "dex" : "2",
+            "sta" : "3",
+            "intel" : "2"
         },
         "alignment_modifier" : {
             "noble" : "1",
@@ -88,20 +88,20 @@
             "deception" : "+3 evade "
         },
         "stats_level" : {
-            "MAX_HEALTH" : "120",
-            "MAX_ENERGY" : "120",
-            "STRENGTH" : "10",
-            "DEXTERITY" : "10",
-            "STAMINA" : "14",
-            "INTELLIGENCE" : "14"
+            "m_hp" : "120",
+            "m_ep" : "120",
+            "str" : "10",
+            "dex" : "10",
+            "sta" : "14",
+            "intel" : "14"
         }, 
         "stats_modifier" : {
-            "MAX_HEALTH" : "4",
-            "MAX_ENERGY" : "4",
-            "STRENGTH" : "3",
-            "DEXTERITY" : "3",
-            "STAMINA" : "3",
-            "INTELLIGENCE" : "3"
+            "m_hp" : "4",
+            "m_ep" : "4",
+            "str" : "3",
+            "dex" : "3",
+            "sta" : "3",
+            "intel" : "3"
         },
         "alignment_modifier" : {
             "purest" : "1",
@@ -122,20 +122,20 @@
             "psychic_trance" : "-3 enemy modifier "
         },
         "stats_level" : {
-            "MAX_HEALTH" : "120",
-            "MAX_ENERGY" : "110",
-            "STRENGTH" : "14",
-            "DEXTERITY" : "11",
-            "STAMINA" : "12",
-            "INTELLIGENCE" : "12"
+            "m_hp" : "120",
+            "m_ep" : "110",
+            "str" : "14",
+            "dex" : "11",
+            "sta" : "12",
+            "intel" : "12"
         },
         "stats_modifier" : {
-            "MAX_HEALTH" : "4",
-            "MAX_ENERGY" : "4",
-            "STRENGTH" : "2",
-            "DEXTERITY" : "2",
-            "STAMINA" : "2",
-            "INTELLIGENCE" : "4"
+            "m_hp" : "4",
+            "m_ep" : "4",
+            "str" : "2",
+            "dex" : "2",
+            "sta" : "2",
+            "intel" : "4"
         },
         "alignment_modifier" : {
             "savage" : "1",
@@ -159,20 +159,20 @@
             }
        },
         "stats_level" : {
-            "MAX_HEALTH" : "120",
-            "MAX_ENERGY" : "120",
-            "STRENGTH" : "12",
-            "DEXTERITY" : "12",
-            "STAMINA" : "12",
-            "INTELLIGENCE" : "12"
+            "m_hp" : "120",
+            "m_ep" : "120",
+            "str" : "12",
+            "dex" : "12",
+            "sta" : "12",
+            "intel" : "12"
         },
         "stats_modifier" : {
-            "MAX_HEALTH" : "3",
-            "MAX_ENERGY" : "3",
-            "STRENGTH" : "4",
-            "DEXTERITY" : "3",
-            "STAMINA" : "4",
-            "INTELLIGENCE" : "3"
+            "m_hp" : "3",
+            "m_ep" : "3",
+            "str" : "4",
+            "dex" : "3",
+            "sta" : "4",
+            "intel" : "3"
         },
         "alignment_modifier" : {
             "valiant" : "1",
@@ -191,12 +191,12 @@
         "description" : "It first started as a disease brought out by the moonlight, but over generations the humanity has slowly been bred out of this wolf like species.",
        "racial_abilities" : {
             "Heart of the Beast" : {
-                "MAX_HEALTH" : "4",
-                "MAX_ENERGY" : "4",
-                "STRENGTH" : "3",
-                "DEXTERITY" : "2",
-                "STAMINA" : "4",
-                "INTELLIGENCE" : "-2"
+                "m_hp" : "4",
+                "m_ep" : "4",
+                "str" : "3",
+                "dex" : "2",
+                "sta" : "4",
+                "intel" : "-2"
             },
             "Feral attack" : {
                 "to_hit" : "1d20 + dexterity",
@@ -204,20 +204,20 @@
             }
         },
         "stats_level" : {
-            "MAX_HEALTH" : "130",
-            "MAX_ENERGY" : "120",
-            "STRENGTH" : "13",
-            "DEXTERITY" : "11",
-            "STAMINA" : "11",
-            "INTELLIGENCE" : "10"
+            "m_hp" : "130",
+            "m_ep" : "120",
+            "str" : "13",
+            "dex" : "11",
+            "sta" : "11",
+            "intel" : "10"
         },
         "stats_modifier" : {
-            "MAX_HEALTH" : "4",
-            "MAX_ENERGY" : "3",
-            "STRENGTH" : "4",
-            "DEXTERITY" : "4",
-            "STAMINA" : "3",
-            "INTELLIGENCE" : "2"
+            "m_hp" : "4",
+            "m_ep" : "3",
+            "str" : "4",
+            "dex" : "4",
+            "sta" : "3",
+            "intel" : "2"
         },
         "alignment_modifier" : {
             "hostile" : "1",
@@ -234,20 +234,20 @@
         "description" : "",           
         "racial_abilities" : {},
         "stats_level" : {
-            "MAX_HEALTH" : "",
-            "MAX_ENERGY" : "",
-            "STRENGTH" : "",
-            "DEXTERITY" : "",
-            "STAMINA" : "",
-            "INTELLIGENCE" : ""
+            "m_hp" : "",
+            "m_ep" : "",
+            "str" : "",
+            "dex" : "",
+            "sta" : "",
+            "intel" : ""
         },
         "stats_modifier" : {
-            "MAX_HEALTH" : "",
-            "MAX_ENERGY" : "",
-            "STRENGTH" : "",
-            "DEXTERITY" : "",
-            "STAMINA" : "",
-            "INTELLIGENCE" : ""
+            "m_hp" : "",
+            "m_ep" : "",
+            "str" : "",
+            "dex" : "",
+            "sta" : "",
+            "intel" : ""
         },
         "alignment_modifier" : {
         },

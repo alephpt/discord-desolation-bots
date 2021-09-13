@@ -11,6 +11,11 @@ const creds = {
 const pool = new Pool(creds);
 const client = new Client(creds);
 
+async function format(text, values) {
+    let exec = await pool.query(text, values);
+    return exec;
+}
+
 module.exports = {
     addPlayer: async function (player) {
         const text = `
@@ -36,17 +41,19 @@ module.exports = {
         return playerdata;
     },
 
-    addNewChar: function (c) {
-        const text = `
-            INSERT INTO char_data (player_id, char_name, level, sex, race, world, location,
-                discipline, mastery, alignment, group_name, quest_current, clan)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    addNewChar: async function (c) {
+        // add character
+        const character = `
+            INSERT INTO char_data (player_id, char_name, world, loc, race, sex, lvl, exp, cond, atk, def, focus
+                align, stats, stat_mod, g_name, active_q, clan)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
             RETURNING id
         `;
 
-        const values = [c.player_id, c.char_name, c.level, c.sex, c.race, c.world, c.loc, 
-            c.discipline, c.mastery, c.alignment, c.group_name, [c.quest_current], c.clan];
-        return pool.query(text, values);
+        const charvalues = [c.player_id, c.char_name, c.world, c.loc, c.race, c.sex, c.lvl, c.exp, [c.cond],
+            c.atk, c.def, c.focus, c.align, c.stats, c.stat_mod, c.g_name, [c.active_q], c.clan];
+        const chardat = await pool.query(character, charvalues);
+
     },
 /*
  *

@@ -7,19 +7,24 @@ const cs = require('./cs.js');
 
 module.exports = {
     Type : class {
-        constructor(player_id, char_name, world, loc, lvl, race, sex, focus, align, stats, 
-                group_name, active_q, total_q, clan) {
+        constructor(player_id, char_name, world, loc, race, sex, lvl, exp, cond, atk, def, 
+                focus, align, stats, stat_mod, g_name, active_q, total_q, clan) {
             this.player_id = player_id;
             this.char_name = char_name;
             this.world = world;
             this.loc = loc;
-            this.lvl = lvl;
             this.race = race;
             this.sex = sex;
+            this.lvl = lvl;
+            this.exp = exp;
+            this.cond = cond;
+            this.atk = atk;
+            this.def = def;
             this.focus = focus;
             this.align = align;
             this.stats = stats;
-            this.group_name = group_name;
+            this.stat_mod = stat_mod;
+            this.g_name = g_name;
             this.active_q = active_q;
             this.total_q = total_q;
             this.clan = clan;
@@ -43,7 +48,7 @@ module.exports = {
                     await msg.channel.send('Timed out...');
                     return false;
                 } else {
-                    let confirmed = await support.compare(response[0].toLowerCase(), 'y');
+                    let confirmed = await support.compare(response[0], 'y');
                     if (confirmed) {
                         return char_name;
                     }
@@ -117,13 +122,13 @@ module.exports = {
                 await msg.channel.send('You won\'t fair well in combat. Start over.');
             }
             if (focus == "⚔️") {
-                return 'Melee';
+                return 'melee';
             } else
             if (focus == "🏹") {
-                return 'Ranged';
+                return 'ranged';
             } else
             if (focus == "🪄") {
-                return 'Magic';
+                return 'magic';
             } else {
                 return false;
             }
@@ -131,8 +136,7 @@ module.exports = {
         }
 
         // get players stats of choice
-        async getStats(msg, race) {
-            let racedata;
+        async getStats(msg, racedata) {
             await msg.channel.send("We have to figure out your stats. \nWould you like to proceed with defaults, or play by chance?\nType `YES` for defaults or `ROLL` to test your luck.");
 
             let choice = await support.userprompt(msg);
@@ -143,12 +147,6 @@ module.exports = {
             }
 
             let stat = new stats.Type();
-            if (race[0] !== "Half-Blood"){
-                racedata = races[race];
-            } else
-            if (race[0] === "Half-blood"){
-                racedata = cs.halfBlood(race[0][0], race[0][1]);
-            }
 
             if (racedata) {
                 // if the player chooses to chance it
@@ -156,6 +154,7 @@ module.exports = {
                     // populate list of options 
                     let statsList = ["Strength", "Dexterity", "Stamina", "Intelligence"]
                     let roll;
+
                     // function to present options
                     async function chance() {
                         let statString = "";
@@ -175,37 +174,37 @@ module.exports = {
                             await msg.channel.send("Rolling..")
                         }
 
-                        await setTimeout( function() {
-                            msg.channel.send("You rolled a " + roll + ". Choose a stat to apply it to.\n"
+                        await setTimeout( async function() {
+                            await msg.channel.send("You rolled a " + roll + ". Choose a stat to apply it to.\n"
                                 + "Your options are " + statString);
                         }, 2000);
                         
                         let statchoice = await support.userprompt(msg); 
                         if (!statchoice) {
-                            msg.channel.send("We don't have all day sweet cheeks.") 
+                            await msg.channel.send("We don't have all day sweet cheeks.") 
                         }
 
                         statchoice = await support.compare(statchoice, statsList);
                         if (statchoice) {
                             let chosen = false;
 
-                            if (statchoice === "Strength" && !stat.strength) {
-                                stat.strength = roll;
+                            if (statchoice === "Strength" && !stat.str) {
+                                stat.str = await roll;
                                 chosen = true;
                                 roll = false;
                             } else
-                            if (statchoice === "Dexterity" && !stat.dexterity) {
-                                stat.dexterity = roll;
+                            if (statchoice === "Dexterity" && !stat.dex) {
+                                stat.dex = await roll;
                                 chosen = true;
                                 roll = false;
                             } else
-                            if (statchoice === "Stamina" && !stat.stamina) {
-                                stat.stamina = roll;
+                            if (statchoice === "Stamina" && !stat.sta) {
+                                stat.sta = await roll;
                                 chosen = true;
                                 roll = false;
                             } else
-                            if (statchoice === "Intelligence" && !stat.intelligence) {
-                                stat.intelligence = roll;
+                            if (statchoice === "Intelligence" && !stat.intel) {
+                                stat.int = await roll;
                                 chosen = true;
                                 roll = false;
                             } 
@@ -213,7 +212,7 @@ module.exports = {
                             if (chosen) {
                                 let index = await statsList.indexOf(statchoice);
                                 if (index !== -1) {
-                                    statsList.splice(index, 1)
+                                    await statsList.splice(index, 1)
                                 }
                             } else {
                                 await msg.channel.send("Invalid Option. Try Again.");
@@ -221,30 +220,24 @@ module.exports = {
                         } else {
                             await msg.channel.send("Choose from the list of options.");
                         }
-                        if (statsList.length === 0) { return true; }
+                        if (stat.str && stat.dex && stat.sta && stat.intel) { return true; }
                     }
+
                     let choicestatus = await support.looper(false, chance)
                 } else
                 if (choice.toLowerCase() === "yes"){
                     // get stats from race
-                    stat.strength = racedata?.stats_level.STRENGTH;
-                    stat.dexterity = racedata?.stats_level.DEXTERITY;
-                    stat.stamina = racedata?.stats_level.STAMINA;
-                    stat.intelligence = racedata?.stats_level.INTELLIGENCE;
+                    stat.str = racedata?.stats_level.str;
+                    stat.dex = racedata?.stats_level.dex;
+                    stat.sta = racedata?.stats_level.sta;
+                    stat.intel = racedata?.stats_level.intel;
                 } 
 
-                stat.max_health = racedata?.stats_level.MAX_HEALTH;
-                stat.current_health = stat.max_health;
-                stat.max_energy = racedata?.stats_level.MAX_ENERGY;
-                stat.current_energy = stat?.max_energy;
+                stat.m_hp = racedata?.stats_level.m_hp;
+                stat.c_hp = stat.m_hp;
+                stat.m_ep = racedata?.stats_level.m_ep;
+                stat.c_ep = stat?.m_ep;
             }
-    
-            stat.exp = 100;
-            stat.condition = 'good'
-
-            stat.attack = 0
-            stat.defense = 0
-            
             return stat
         }
 

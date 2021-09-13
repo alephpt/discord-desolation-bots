@@ -1,22 +1,19 @@
 //STATS 
 module.exports = {
     Type : class {
-        constructor (exp, conditions, current_health, max_health, current_energy, max_energy, attack, 
-            defense, strength, dexterity, stamina, intelligence) {
+        constructor (exp, cond, c_hp, m_hp, c_ep, m_ep, atk, def, str, dex, sta, intel) {
             this.exp = exp;
-            this.conditions = conditions;
-            this.current_health = current_health;
-            this.max_health = max_health;
-            this.current_energy = current_energy;
-            this.max_energy = max_energy;
-            this.attack = attack;
-            this.defense = defense;
-            this.strength = strength;
-            this.dexterity = dexterity;
-            this.stamina = stamina;
-            this.intelligence = intelligence;
+            this.cond = cond;
+            this.c_hp = c_hp;
+            this.m_hp = m_hp;
+            this.c_ep = c_ep;
+            this.m_ep = m_ep;
+            this.atk = atk;
+            this.def = def;
+            this.str = str;
+            this.dex = dex;
+            this.sta = sta;
+            this.intel = intel;
         }
-
     }
-
 }

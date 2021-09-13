@@ -128,10 +128,12 @@ module.exports = {
         let count = 5;
         let time = Date.now();
         let timeout = time + 10000;
-        while (!condition && count > 0 && time < timeout) { 
+        while (!condition) { 
             condition = await func(); 
             count = count - 1;
-            time = Date.now();
+            time = await Date.now();
+            if (count === 0 || time > timeout) { return false; }
+            console.log("count: " + count + "time: " + time + "\ntimeout: " + timeout);
         };
         return condition;
     },
@@ -140,22 +142,24 @@ module.exports = {
     // otherwise iterate through the input items and look for a math
     // or return false
     compare: async function (input, target) {
-        if (typeof input === 'string' || typeof input === 'int') {
-            for (let i = 0; i < target.length; i++){
-                if (input.toLowerCase() === target[i].toLowerCase()) {
-                    return await target[i];
-                }
-            }
-        } else {
-            for (let j = 0; j < input.length; input++){
+        if (target) {
+            if (typeof input === 'string' || typeof input === 'int') {
                 for (let i = 0; i < target.length; i++){
-                    if (input[j].toLowerCase() === target[i].toLowerCase()){
+                    if (input.toLowerCase() === target[i].toLowerCase()) {
                         return await target[i];
                     }
                 }
+            } else {
+                for (let j = 0; j < input.length; input++){
+                    for (let i = 0; i < target.length; i++){
+                        if (input[j].toLowerCase() === target[i].toLowerCase()){
+                            return await target[i];
+                        }
+                    }
+                }
             }
+            return false;
         }
-        return false;
     },
 
     // returns current time

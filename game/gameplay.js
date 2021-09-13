@@ -22,7 +22,6 @@ module.exports = {
                 enemyName = enemy.nickname; 
             }
             enemyID = enemy.id;
-            console.log(enemyID);
             await msg.channel.send("<@" + msg.author.id + "> has challenged " + pingName + "!!");
             setTimeout
         } else {
@@ -77,7 +76,7 @@ module.exports = {
     test: async function(msg, vars, client) {
         let namespace;
         if (namespace = msg.mentions.members.first()){
-            console.log(namespace.nickname)
+          //  console.log(namespace.nickname)
             msg.channel.send("name = " + namespace.nickname)
         }
 

@@ -145,7 +145,7 @@ async function getBreeds(msg){
         if (genetics1) {
             // if it's in the list of races, store it in race1
             race1 = await support.compare(genetics1, character.info.race);
-            // if the second two words are concatonated
+            // if the second two words are concatenated
             if (genetics3) {
                 // if they are in the in list of races, store in race1
                 race2 = await support.compare(genetics3, character.info.race);

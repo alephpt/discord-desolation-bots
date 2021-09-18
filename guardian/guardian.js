@@ -61,8 +61,9 @@ module.exports = {
                                         if (thisChar.race[0] === `Half-Blood`){
                                             thisChar.race = await thisChar.race[1][0] + "-" + thisChar.race[1][1];
                                         }
-
-                                        thisChar.align = await racedata?.alignment_modifier;
+                                
+                                        thisChar.align = await JSON.stringify(racedata?.alignment_modifier);
+                                        console.log(thisChar.align)
                                         thisChar.focus = await racedata?.focus_modifier;
                                         thisChar.focus[focusText] = await (Number(thisChar.focus[focusText]) + 3).toString();
                                         thisChar.stat_mod = await racedata.stats_modifier;
@@ -95,18 +96,18 @@ module.exports = {
                                 }
                             }
                         } else {
-                            msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
+                           await msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
                         }
                     } else {
-                        msg.channel.send("You failed the simplest of tasks.\nStart over.");
+                        await msg.channel.send("You failed the simplest of tasks.\nStart over.");
                     }
                 } else if (shortmsg.toLowerCase() === 'no') {
-                    msg.channel.send("Stop Wasting My Time.");
+                    await msg.channel.send("Stop Wasting My Time.");
                 } else {
-                    msg.channel.send("That isn\'t an option. Start over.");
+                    await msg.channel.send("That isn\'t an option. Start over.");
                 }
             } else {
-                msg.channel.send("You have too many characters.");
+                await msg.channel.send("You have too many characters.");
                 // delete this channel
                 return false;
             }

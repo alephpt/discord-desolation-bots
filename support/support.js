@@ -127,13 +127,10 @@ module.exports = {
     looper: async function (condition, func) {
         let count = 5;
         let time = Date.now();
-        let timeout = time + 10000;
         while (!condition) { 
             condition = await func(); 
             count = count - 1;
-            time = await Date.now();
-            if (count === 0 || time > timeout) { return false; }
-            console.log("count: " + count + "time: " + time + "\ntimeout: " + timeout);
+            if (count === 0) { return false; }
         };
         return condition;
     },

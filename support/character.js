@@ -152,7 +152,7 @@ module.exports = {
                 // if the player chooses to chance it
                 if (choice.toLowerCase() === "roll"){
                     // populate list of options 
-                    let statsList = ["Strength", "Dexterity", "Stamina", "Intelligence"]
+                    let statsList = await ["Strength", "Dexterity", "Stamina", "Intelligence"]
                     let roll;
 
                     // function to present options
@@ -220,25 +220,25 @@ module.exports = {
                         } else {
                             await msg.channel.send("Choose from the list of options.");
                         }
-                        if (stat.str && stat.dex && stat.sta && stat.intel) { return true; }
+                        if (statsList.length === 0) { return true; }  
                     }
 
                     let choicestatus = await support.looper(false, chance)
                 } else
                 if (choice.toLowerCase() === "yes"){
                     // get stats from race
-                    stat.str = racedata?.stats_level.str;
-                    stat.dex = racedata?.stats_level.dex;
-                    stat.sta = racedata?.stats_level.sta;
-                    stat.intel = racedata?.stats_level.intel;
+                    stat.str = await racedata?.stats_level.str;
+                    stat.dex = await racedata?.stats_level.dex;
+                    stat.sta = await racedata?.stats_level.sta;
+                    stat.intel = await racedata?.stats_level.intel;
                 } 
 
-                stat.m_hp = racedata?.stats_level.m_hp;
-                stat.c_hp = stat.m_hp;
-                stat.m_ep = racedata?.stats_level.m_ep;
-                stat.c_ep = stat?.m_ep;
+                stat.m_hp = await racedata?.stats_level.m_hp;
+                stat.c_hp = await stat.m_hp;
+                stat.m_ep = await racedata?.stats_level.m_ep;
+                stat.c_ep = await stat?.m_ep;
             }
-            return stat
+            if(stat.str && stat.dex && stat.sta && stat.intel) { return stat; }
         }
 
         // get player alignment

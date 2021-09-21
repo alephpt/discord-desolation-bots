@@ -27,7 +27,7 @@ module.exports = {
     // awaits a message from a user and returns the content of the message
     userprompt: async function (msg) {
         let result = false;
-        await msg.channel.awaitMessages(m => m.author.id === msg.author.id, {max: 1, time: 30000})
+        await msg.channel.awaitMessages(m => m.author.id === msg.author.id, {max: 1, time: 60000})
             .then(async shortmsg => {
                 result = await shortmsg.first().content;
             }).catch(() => {});      
@@ -45,7 +45,7 @@ module.exports = {
     },
 
     reactprompt: async function (msg) {
-        let result = await msg.awaitReactions(m => m, {max: 1, time: 30000})
+        let result = await msg.awaitReactions(m => m, {max: 1, time: 60000})
             .then(collected => {
                 let reaction = collected.first();
                 if (reaction) {

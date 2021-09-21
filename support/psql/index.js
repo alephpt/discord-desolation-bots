@@ -44,7 +44,7 @@ module.exports = {
     addNewChar: async function (c) {
         // add character
         const character = `
-            INSERT INTO char_data (player_id, char_name, world, loc, race, sex, lvl, exp, cond, atk, def, focus
+            INSERT INTO char_data (player_id, char_name, world, loc, race, sex, lvl, exp, cond, atk, def, focus,
                 align, stats, stat_mod, g_name, active_q, clan)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
             RETURNING id

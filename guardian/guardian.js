@@ -15,96 +15,106 @@ module.exports = {
         if (player_data) {
             let char_count = await player.getCharCount(msg.author.id);
             if (char_count < 3) {
-                // prompt the user
+                let focusText, racedata, thisChar;
+
+                // prompt the user to begin
                 await msg.channel.send("Are you ready?");
                 let shortmsg = await support.userprompt(msg);
 
+                // if user is ready, instantiate player class and get player_id
                 if (!shortmsg) {
                     await msg.channel.send("Your response time is too slow.. try paying attention this time.");
                     return;
                 } else
                 if (shortmsg[0].toLowerCase() === 'y') {
-                    // instantiate player class
-                    let thisChar = new character.Type();
-
-                    // get player id
-                    thisChar.player_id = msg.author.id;
-
-                    // get character name
-                    thisChar.char_name = await thisChar.getCharName(msg);
-
-                    // get character sex
-                    if (thisChar.char_name) { 
-                        thisChar.sex = await thisChar.getSex(msg);
-
-                        // get character race
-                        if (thisChar.sex) {
-                            thisChar.race = await thisChar.getRace(msg);
-
-                            let racedata;
-                            if (thisChar.race[0] !== "Half-Blood"){
-                                racedata = await races[thisChar.race];
-                            } else
-                            if (thisChar.race[0] === "Half-Blood"){
-                                racedata = await cs.halfBlood(thisChar.race[1][0], thisChar.race[1][1]);
-                            }
-
-                            // get character focus
-                            if(thisChar.race) {
-                                let focusText = await thisChar.getFocus(msg);
-                                
-                                // get character stats
-                                if(focusText) {
-                                    thisChar.stats = await thisChar.getStats(msg, racedata);
-
-                                    if(thisChar.stats) {
-                                        if (thisChar.race[0] === `Half-Blood`){
-                                            thisChar.race = await thisChar.race[1][0] + "-" + thisChar.race[1][1];
-                                        }
-                                
-                                        thisChar.align = await JSON.stringify(racedata?.alignment_modifier);
-                                        console.log(thisChar.align)
-                                        thisChar.focus = await racedata?.focus_modifier;
-                                        thisChar.focus[focusText] = await (Number(thisChar.focus[focusText]) + 3).toString();
-                                        thisChar.stat_mod = await racedata.stats_modifier;
-                                        
-                                        thisChar.world = "starter";
-                                        thisChar.loc = await support.locIndex(20, 20);
-                                        thisChar.lvl = 1;
-                                        thisChar.exp = 100;
-                                        thisChar.cond = 'good';
-                                        thisChar.atk = (Number(thisChar.stats.str) + Number(thisChar.stats.intel));
-                                        thisChar.def = (Number(thisChar.stats.dex) + Number(thisChar.stats.sta));
-                                        thisChar.g_name = await thisChar.race;
-                                        thisChar.quest_current = 'Genesis';
-                                        thisChar.clan = await thisChar.race;
-                                    
-                                        // UPDATE DATABASE //
-                                        if (thisChar.char_name != false && thisChar.clan) {
-                                            // add new character to database
-                                            await db.addNewChar(thisChar);
-                                            
-                                            // set new character as active character
-                                            let activechar = await db.setActiveChar(msg.author.id, thisChar.char_name);
-                                            
-                                            // update players character list
-                                            await player.updateCharNames(msg.author.id);
-                                            
-                                            await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");                                        
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                           await msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
-                        }
-                    } else {
-                        await msg.channel.send("You failed the simplest of tasks.\nStart over.");
-                    }
-                } else if (shortmsg.toLowerCase() === 'no') {
+                    thisChar = new character.Type();
+                    thisChar.player_id = await msg.author.id;
+                } else
+                if (shortmsg.toLowerCase() === 'no') {
                     await msg.channel.send("Stop Wasting My Time.");
                 } else {
                     await msg.channel.send("That isn\'t an option. Start over.");
+                }
+
+                // get character name
+                if (thisChar.player_id) {
+                    thisChar.char_name = await thisChar.getCharName(msg);
+                }  
+                
+
+                // get character sex
+                if (thisChar.char_name) { 
+                    thisChar.sex = await thisChar.getSex(msg);
+                } else {
+                    await msg.channel.send("You failed the simplest of tasks.\nStart over.");
+                }
+                
+                // get character race and store racedata
+                if (thisChar.sex) {
+                    thisChar.race = await thisChar.getRace(msg);
+
+                    if (thisChar.race[0] !== "Half-Blood"){
+                        racedata = await races[thisChar.race];
+                    } else
+                    if (thisChar.race[0] === "Half-Blood"){
+                        racedata = await cs.halfBlood(thisChar.race[1][0], thisChar.race[1][1]);
+                    }
+
+                    if (racedata) {
+                        racedata = await racedata
+                    }
+                } else {
+                    await msg.channel.send("Well, we almost got somewhere.\nTry starting over.");
+                }
+
+                // get character focus
+                if(thisChar.race) {
+                    focusText = await thisChar.getFocus(msg);
+                }
+                 
+                // get character stats
+                if(focusText) {
+                    msg.channel.send("race: " + racedata);
+                    thisChar.stats = await thisChar.getStats(msg, racedata);
+                }
+                
+                // format remaining data
+                if(thisChar.stats) {
+                    if (thisChar.race[0] === `Half-Blood`){
+                        thisChar.world = await thisChar.race[1][0];
+                        thisChar.race = await thisChar.race[1][0] + "-" + thisChar.race[1][1];
+                    } else {
+                        thisChar.world = await thisChar.race;
+                    }
+                    
+                    thisChar.align = await JSON.stringify(racedata?.alignment_modifier);
+                    thisChar.focus = await racedata?.focus_modifier;
+                    thisChar.focus[focusText] = await (Number(thisChar.focus[focusText]) + 3).toString();
+                    thisChar.focus = await JSON.stringify(thisChar.focus);
+                    thisChar.stat_mod = await JSON.stringify(racedata.stats_modifier);
+                    thisChar.loc = await support.locIndex(20, 20);
+                    thisChar.lvl = 1;
+                    thisChar.exp = 100;
+                    thisChar.cond = 'good';
+                    thisChar.atk = (Number(thisChar.stats.str) + Number(thisChar.stats.intel));
+                    thisChar.def = (Number(thisChar.stats.dex) + Number(thisChar.stats.sta));
+                    thisChar.g_name = await thisChar.race;
+                    thisChar.active_q = 'Genesis';
+                    thisChar.clan = await thisChar.race;
+                }
+
+                // UPDATE DATABASE //
+                if (thisChar.char_name != false && thisChar.clan) {
+                    // add new character to database
+                     await db.addNewChar(thisChar);
+
+                    // set new character as active character
+                    let activechar = await db.setActiveChar(msg.author.id, thisChar.char_name);
+
+                    // update players character list
+                    await player.updateCharNames(msg.author.id);
+
+                    await msg.channel.send("Well, " + thisChar.char_name + ". It is time for you to `.join` the fight!");
                 }
             } else {
                 await msg.channel.send("You have too many characters.");

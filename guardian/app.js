@@ -8,15 +8,17 @@ client.on('ready' , () => {
     console.log('Guardian: \nNone Shall Pass!');
 });
 
-client.on('message', (msg) => {
+client.on('message', async (msg) => {
     let [, cmd, vars] = msg.content.match(/^(?:\.(\S+)(?:\s+(.+))?$)?/s);
     
-    if (cmd) { cmd = cmd.toLowerCase() }
+    if (cmd) { 
+        cmd = cmd.toLowerCase();
+    }
 
     switch (cmd) {
 // CHARACTER CREATION PROCESS//
         case "create":
-            gate.addchar(msg);
+            gate.addchar(msg, bot, client);
             break;       
         case "getplayer":
             gate.getplayer(msg);

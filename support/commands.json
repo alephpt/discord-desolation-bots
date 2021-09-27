@@ -1,0 +1,66 @@
+{
+    "merchant" : {
+        "user" : {
+            "wtb" : "Want To Buy from User Market.",
+            "wts" : "Want To Sell to User Market."
+        },
+        "broken" : {
+            "market" : "Show Items for Sell by Users. (doesn't exist yet)",
+            "list" : "Show Items for Sell from Merchant. (doesn't exist yet)",
+            "buy" : "Buy Item from Merchant if in stock (doesn't exist yet)",
+            "sell" : "Sell Item from Inventory to Merchant. (doesn't exist yet)"
+        }
+    },
+    "oracle" : {
+        "user" : {
+            "join" : "Joins Character to World and Deletes Channel"
+        },
+        "staff" : {
+            "rolecache" : "Shows data from all Guild Roles.",
+            "addme" : "Add a Role",
+            "delme" : "Deletes a Role",
+            "cmd" : "Execute a Command/Send Message via Oracle.",
+            "chtab" : "Character Table to show Character Template.",
+            "ftab" : "Focus Table to show Focus Template."
+        },
+        "broken" : {
+            "start" : "Starts Character Creation"
+        }
+    },
+    "guardian" : {
+        "user" : {
+            "getplayer" : "Get Player Data from Database.",
+            "getchar" : "Get Active Character Data from Database.",
+            "delchar" : "Delete Character Listed."
+        },
+        "staff" : {
+            "delplayer" : "Deletes Player from Database.",
+            "addplayer" : "Adds Player Data to Database.",
+            "log" : "Test function"
+        },
+        "broken" : {
+            "create" : "Starts Character Creation Process, creating Private Channel. (code problems)"
+        }
+    },
+    "game master" : {
+        "user" : {
+            "atk" : "To be used after spawn.",
+            "spawn" : "Spawns an enemy to attack.",
+            "map" : "Prototype rendering.",
+            "respawn" : "Resets Map state."
+        },
+        "staff" : {
+            "test" : "does test stuff"
+        },
+        "broken" : {
+            "roll" : "Roll die where X is the number of Die and Y is the number of Sides. (parsing issues)",
+            "move" : "Moves character on map, but only works for Kat and Pragma."
+            
+        }
+    },
+    "marks" : {
+        "user" : {
+            "help" : "you get it."
+        }
+    }
+}

@@ -1,3 +1,5 @@
+let embedstring = "";
+
 const map = {
     "width" : 100,
     "height" : 50
@@ -15,22 +17,55 @@ module.exports = {
     // returns member object from message author
     member: function (msg) {
         let member = msg.guild.members.cache.find(({user: {username, discriminator}}) =>
-                `${username}#${discriminator}` === msg.author.tag,)
-        return member
+                `${username}#${discriminator}` === msg.author.tag,);
+        return member;
     },
 
-    username: function (msg, usr, dsc) {
-        let username = msg.guild.members.cache.find((u => u.id === id))
-        return username
+    // returns if a user is a moderator or not
+    mod: function(member) {
+        let mod = member.roles.cache.get('876288940351553558');
+
+        if (mod?.hoist) { mod = true; }
+        else { mod = false; }
+
+        return mod;
+    },
+
+    // return bot data as member object based on name
+    bot: async function(msg, name) {
+        let bot_id = false;
+
+        if (name === "game master") {
+        bot_id = '879867556855443516';
+            } else
+        if (name === "guardian") {
+            bot_id = '879862149097332776';
+        } else
+        if (name === "merchant") {
+            bot_id = '882171856910700554';
+        } else
+        if (name === "oracle") {
+            bot_id = '876270934183542825';
+        } else
+        if (name === "marks") {
+            bot_id = '891698303434129438';
+        }
+
+        if (bot_id) {
+            bot_id = await msg.guild.members.fetch(bot_id);
+        }
+
+        return bot_id;
     },
 
     // awaits a message from a user and returns the content of the message
-    userprompt: async function (msg) {
+    userprompt: async function (msg, bot) {
         let result = false;
         await msg.channel.awaitMessages(m => m.author.id === msg.author.id, {max: 1, time: 60000})
             .then(async shortmsg => {
                 result = await shortmsg.first().content;
-            }).catch(() => {});      
+            }).catch(() => {});
+
         return result;
     },
 

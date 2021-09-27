@@ -189,22 +189,22 @@ module.exports = {
                             let chosen = false;
 
                             if (statchoice === "Strength" && !stat.str) {
-                                stat.str = await roll;
+                                stat.str = await Number(roll);
                                 chosen = true;
                                 roll = false;
                             } else
                             if (statchoice === "Dexterity" && !stat.dex) {
-                                stat.dex = await roll;
+                                stat.dex = await Number(roll);
                                 chosen = true;
                                 roll = false;
                             } else
                             if (statchoice === "Stamina" && !stat.sta) {
-                                stat.sta = await roll;
+                                stat.sta = await Number(roll);
                                 chosen = true;
                                 roll = false;
                             } else
                             if (statchoice === "Intelligence" && !stat.intel) {
-                                stat.int = await roll;
+                                stat.intel = await Number(roll);
                                 chosen = true;
                                 roll = false;
                             } 
@@ -220,7 +220,7 @@ module.exports = {
                         } else {
                             await msg.channel.send("Choose from the list of options.");
                         }
-                        if (statsList.length === 0) { return true; }  
+                        if (statsList.length === 0) { msg.channel.send("worked"); return true; }  
                     }
 
                     let choicestatus = await support.looper(false, chance)
@@ -249,4 +249,3 @@ module.exports = {
         }
     }
 }
-

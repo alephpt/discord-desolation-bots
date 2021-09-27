@@ -1,9 +1,9 @@
-
 const Discord = require('discord.js');
 const support = require('../support/support.js');
 const player = require('../support/player.js');
 const chardata = require('../support/json/char.json');
 const focus = require('../support/json/focus.json');
+const bot = "oracle";
 
 
 embedstring = "";
